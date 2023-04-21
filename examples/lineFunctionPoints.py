@@ -11,9 +11,9 @@ fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 
 heart = Heart(radius)
-heart.generateStraightVein(Point(0,0),Point(50,50),20)
-heart.generateStraightVein(Point(90,90),Point(50,50),20)
-heart.generateStraightVein(Point(90,90),Point(0,0),20)
+heart.generateStraightVein(Point(0,0),Point(50,50),20,veinRadius)
+heart.generateStraightVein(Point(90,90),Point(50,50),20,veinRadius)
+heart.generateStraightVein(Point(90,90),Point(0,0),20,veinRadius)
 
 while(1):
     counter += 1

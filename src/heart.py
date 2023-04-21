@@ -1,7 +1,6 @@
 import numpy as np
-
 from point import Point
-from trigonometry import cartesianToSpherical
+from vein import VeinSegment
 
 u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
@@ -18,21 +17,9 @@ class Heart():
     def getRadius(self, point = Point(0,0)):
         return self.radius * self.deformation
     
-    def generateStraightVein(self, A, B, resolution):
-        vein = []
-    
-        dx = B.x - A.x
-        dy = B.y - A.y
-        dz = B.z - A.z
-
-        for iterator in range(resolution):
-            xSemiPoint = A.x+iterator*dx/resolution
-            ySemiPoint = A.y+iterator*dy/resolution
-            zSemiPoint = A.z+iterator*dz/resolution
-
-            phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            vein.append(Point(phi,theta,self.getRadius()))
-        self.veins.append(vein)
+    def generateStraightVein(self, A, B, resolution, thickness):
+        vein = VeinSegment(A, B, thickness, self)
+        self.veins.append(vein.getPoints(resolution))
 
     def getHeart(self):
         x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
