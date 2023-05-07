@@ -5,15 +5,14 @@ import numpy as np
 
 radius = 1
 counter = 0
-veinRadius = 0.02    
+veinRadius = 1#0.02    
 
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 
 heart = Heart(radius)
-heart.generateStraightVein(Point(0,0),Point(50,50),20,veinRadius)
-heart.generateStraightVein(Point(90,90),Point(50,50),20,veinRadius)
-heart.generateStraightVein(Point(90,90),Point(0,0),20,veinRadius)
+vein = heart.generateStraightVein(Point(0,0),Point(50,50),200,veinRadius)
+vein.applyStenosis(50, 50, 0.6)
 
 while(1):
     counter += 1

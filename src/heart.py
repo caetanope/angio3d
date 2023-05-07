@@ -1,6 +1,6 @@
 import numpy as np
 from point import Point
-from vein import VeinSegment
+from vein import *
 
 u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
@@ -19,7 +19,17 @@ class Heart():
     
     def generateStraightVein(self, A, B, resolution, thickness):
         vein = VeinSegment(A, B, thickness, self)
-        self.veins.append(vein.getPoints(resolution))
+        vein.calculatePoints(resolution)
+        vein.buildVeinSections()
+        self.veins.append(vein)
+        return vein
+
+    def generateSecondDegreVein(self, A, B, resolution, thickness):
+        vein = SecondDegreeVeinSegment(A, B, thickness, self)
+        vein.calculatePoints(resolution)
+        vein.buildVeinSections()
+        self.veins.append(vein)
+        return vein
 
     def getHeart(self):
         x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
@@ -33,8 +43,11 @@ class Heart():
 
     def plotVeins(self, subplot):
         for vein in self.veins:
-            self.plotVein(subplot, vein)
+            self.plotVein(subplot, vein.getVeinSections())
 
     def plotVein(self, subplot, vein):
-        for point in vein:
-            subplot.plot(point.x*self.getRadius(point), point.y*self.getRadius(point), point.z*self.getRadius(point), marker="o", markersize=5, markeredgecolor="red", markerfacecolor="green")
+        for veinSection in vein:
+            subplot.plot(veinSection.point.x * self.deformation, 
+                         veinSection.point.y * self.deformation, 
+                         veinSection.point.z * self.deformation, 
+                         marker="o", markersize= veinSection.thickness*5, markeredgecolor="blue", markerfacecolor="green")

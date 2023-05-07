@@ -40,3 +40,9 @@ def getPhiR(x,y,z):
 
 def getRadius(X, Y, Z):
     return (X**2 + Y**2 + Z**2)**(1/2)
+
+def calculateAreaFromDiameter(diameter):
+    return np.pi*(diameter/2)**2
+
+def calculateDiameterFromArea(area):
+    return 2*(area/np.pi)**(1/2)
