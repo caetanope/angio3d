@@ -18,8 +18,6 @@ class subBranch():
         childBarea = parentSectionArea * (1 - ratioA)
         return calculateDiameterFromArea(childAarea), calculateDiameterFromArea(childBarea)
     
-    
-
 class VeinSegment():
     def __init__(self, A, B, thickness, heart):
         self.A = A
@@ -92,18 +90,32 @@ def map_values(x, in_min, in_max, out_min, out_max):
     return ((x - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min
 
 class SecondDegreeVeinSegment(VeinSegment):
-    
-    def calculatePoints(self,resolution):
-        dx = self.B.x - self.A.x
-        dy = self.B.y - self.A.y
-        dz = self.B.z - self.A.z
+    #TODO
+    def calculatePoints(self, resolution, midPoint):
 
-        for iterator in range(resolution):
-            xSemiPoint = self.A.x+iterator*dx/resolution
-            ySemiPoint = self.A.y+iterator*dy/resolution
-            zSemiPoint = self.A.z+iterator*dz/resolution
+        p_a0 = self.A.phi
+        p_a1 = self.A.theta
 
-            phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            self.points.append(Point(phi,theta,self.heart.getRadius(Point(phi,theta))))
-            
+        p_b0 = midPoint.phi
+        p_b1 = midPoint.theta
+
+        p_c0 = self.B.phi
+        p_c1 = self.B.theta
+
+        denom = (p_a0 - p_b0) * (p_a0 - p_c0) * (p_b0 - p_c0)
+        a = (p_c0 * (p_b1 - p_a1) + p_b0 * (p_a1 - p_c1) + p_a0 * (p_c1 - p_b1)) / denom
+        b = (p_c0 * p_c0 * (p_a1 - p_b1) + p_b0 * p_b0 * (p_c1 - p_a1) + p_a0 * p_a0
+            * (p_b1 - p_c1)) / denom
+        c = (p_b0 * p_c0 * (p_b0 - p_c0) * p_a1 + p_c0 * p_a0 * (p_c0 - p_a0) * p_b1 + p_a0 *
+            p_b0 * (p_a0 - p_b0) * p_c1) / denom
+
+        x = np.arange(resolution)
+        y = np.arange(resolution)
+
+        for i in range(p_a0, p_c0):
+            y[i] = (a * (x[i] ** 2)) + (b * x[i]) + c
+            phi = x[i]
+            theta = y[i]
+            self.points.append(Point(phi, theta, self.heart.getRadius(Point(phi,theta))))
+
         return self.points

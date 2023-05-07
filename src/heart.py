@@ -24,9 +24,9 @@ class Heart():
         self.veins.append(vein)
         return vein
 
-    def generateSecondDegreVein(self, A, B, resolution, thickness):
+    def generateSecondDegreVein(self, A, B, resolution, thickness, midPoint):
         vein = SecondDegreeVeinSegment(A, B, thickness, self)
-        vein.calculatePoints(resolution)
+        vein.calculatePoints(resolution, midPoint)
         vein.buildVeinSections()
         self.veins.append(vein)
         return vein

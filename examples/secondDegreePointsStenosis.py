@@ -11,7 +11,7 @@ fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 
 heart = Heart(radius)
-vein = heart.generateSecondDegreVein(Point(0,0),Point(50,50),200,veinRadius)
+vein = heart.generateSecondDegreVein(Point(0,0),Point(50,50),200,veinRadius,Point(25,25))
 vein.applyStenosis(50, 25, 0.6)
 
 while(1):
