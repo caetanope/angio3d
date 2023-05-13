@@ -17,10 +17,11 @@ class Heart():
     def getRadius(self, point = Point(0,0)):
         return self.radius * self.deformation
     
-    def generateStraightVein(self, A, B, resolution, thickness):
+    def generateStraightVein(self, A, B, resolution, thickness, parentThickness = 0):
         vein = VeinSegment(A, B, thickness, self)
         vein.calculatePoints(resolution)
         vein.buildVeinSections()
+        vein.adjustThicknessToParent(parentThickness)
         self.veins.append(vein)
         return vein
 

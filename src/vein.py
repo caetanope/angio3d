@@ -17,6 +17,7 @@ class VeinSegment():
         self.heart = heart
         self.points = []
         self.veinSections = []
+        self.resolution = 2
 
     def calculateChildrenThickness(self, ratioA):
         parentSectionArea = calculateAreaFromDiameter(self.thickness)
@@ -25,6 +26,9 @@ class VeinSegment():
         return calculateDiameterFromArea(childAarea), calculateDiameterFromArea(childBarea)
 
     def calculatePoints(self,resolution):
+
+        self.resolution = resolution
+
         dx = self.B.x - self.A.x
         dy = self.B.y - self.A.y
         dz = self.B.z - self.A.z
@@ -44,7 +48,7 @@ class VeinSegment():
             self.veinSections.append(VeinSection(point,self.thickness,self))
 
     def adjustThicknessToParent(self, parentThickness):
-        if parentThickness == self.thickness:
+        if parentThickness == 0:
             return
 
         t = 0
@@ -84,6 +88,12 @@ class VeinSegment():
 
     def getVeinSections(self):
         return self.veinSections
+    
+    def applyThinning(self, finalThickness):
+        for index, veinSection in enumerate(self.veinSections):
+            thickness = finalThickness + (float(self.resolution-index)/self.resolution)*(veinSection.thickness - finalThickness)
+            self.veinSections[index] = VeinSection(veinSection.point,thickness,self)
+            
 
 def map_values(x, in_min, in_max, out_min, out_max):
     # Linear conversion
