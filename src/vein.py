@@ -8,16 +8,7 @@ class VeinSection():
         self.thickness = thickness
         self.veinSegment = veinSegment
 
-class subBranch():
-    def __init__(self, parent):
-        self.parent = parent
-
-    def calculateChildrenThickness(self, ratioA):
-        parentSectionArea = calculateAreaFromDiameter(self.parent.thickness)
-        childAarea = parentSectionArea * ratioA
-        childBarea = parentSectionArea * (1 - ratioA)
-        return calculateDiameterFromArea(childAarea), calculateDiameterFromArea(childBarea)
-    
+   
 class VeinSegment():
     def __init__(self, A, B, thickness, heart):
         self.A = A
@@ -26,6 +17,12 @@ class VeinSegment():
         self.heart = heart
         self.points = []
         self.veinSections = []
+
+    def calculateChildrenThickness(self, ratioA):
+        parentSectionArea = calculateAreaFromDiameter(self.thickness)
+        childAarea = parentSectionArea * ratioA
+        childBarea = parentSectionArea * (1 - ratioA)
+        return calculateDiameterFromArea(childAarea), calculateDiameterFromArea(childBarea)
 
     def calculatePoints(self,resolution):
         dx = self.B.x - self.A.x
@@ -47,6 +44,9 @@ class VeinSegment():
             self.veinSections.append(VeinSection(point,self.thickness,self))
 
     def adjustThicknessToParent(self, parentThickness):
+        if parentThickness == self.thickness:
+            return
+
         t = 0
         for index, veinSection in enumerate(self.veinSections):
             factor = 1
@@ -70,6 +70,7 @@ class VeinSegment():
 
     def applyStenosis(self, position, lenght, grade):
         t = 0
+        print("applyStenosis")
         for index, veinSection in enumerate(self.veinSections):
             factor = 1
             if(index > position) and (index < position + lenght):
@@ -90,7 +91,7 @@ def map_values(x, in_min, in_max, out_min, out_max):
     return ((x - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min
 
 class SecondDegreeVeinSegment(VeinSegment):
-    #TODO
+    
     def calculatePoints(self, resolution, midPoint):
 
         p_a0 = self.A.phi
@@ -103,19 +104,18 @@ class SecondDegreeVeinSegment(VeinSegment):
         p_c1 = self.B.theta
 
         denom = (p_a0 - p_b0) * (p_a0 - p_c0) * (p_b0 - p_c0)
+
         a = (p_c0 * (p_b1 - p_a1) + p_b0 * (p_a1 - p_c1) + p_a0 * (p_c1 - p_b1)) / denom
         b = (p_c0 * p_c0 * (p_a1 - p_b1) + p_b0 * p_b0 * (p_c1 - p_a1) + p_a0 * p_a0
             * (p_b1 - p_c1)) / denom
         c = (p_b0 * p_c0 * (p_b0 - p_c0) * p_a1 + p_c0 * p_a0 * (p_c0 - p_a0) * p_b1 + p_a0 *
             p_b0 * (p_a0 - p_b0) * p_c1) / denom
 
-        x = np.arange(resolution)
-        y = np.arange(resolution)
-
-        for i in range(p_a0, p_c0):
-            y[i] = (a * (x[i] ** 2)) + (b * x[i]) + c
-            phi = x[i]
-            theta = y[i]
+        for index in range(resolution):
+            x = p_a0 + (p_c0-p_a0)*index/resolution
+            y = (a * (x ** 2)) + (b * x) + c
+            phi = x
+            theta = y
             self.points.append(Point(phi, theta, self.heart.getRadius(Point(phi,theta))))
 
         return self.points

@@ -12,13 +12,18 @@ subplot = fig.add_subplot(111, projection='3d')
 
 heart = Heart(radius)
 vein = heart.generateSecondDegreVein(Point(0,0),Point(50,50),200,veinRadius,Point(25,25))
-vein.applyStenosis(50, 50, 0.6)
+Athickness, Bthickness = vein.calculateChildrenThickness(0.7)
+vein = heart.generateSecondDegreVein(Point(50,50),Point(60,70),200,Athickness,Point(55,60),veinRadius)
+vein = heart.generateSecondDegreVein(Point(50,50),Point(40,60),200,Bthickness,Point(45,55),veinRadius)
+Athickness, Bthickness = vein.calculateChildrenThickness(0.7)
+vein = heart.generateSecondDegreVein(Point(40,60),Point(30,60),200,Athickness,Point(35,60),veinRadius)
+vein = heart.generateSecondDegreVein(Point(40,60),Point(35,55),200,Bthickness,Point(30,50),veinRadius)
 
 while(1):
     counter += 1
 
     heart.setPulse(np.sin(counter/20)*0.1 + 0.9)
-    heart.plotHeart(subplot)
+    heart.plotHeart(subplot)    
     heart.plotVeins(subplot)
    
     subplot.set_xlim3d([-1,1])
