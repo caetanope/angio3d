@@ -17,8 +17,8 @@ class SegmentoDeVeia{
     pointoFinal
     espessura
     coração
-    pontos
-    Tabela secçõeseVeia
+    Tabela pontos
+    Tabela secçõesDeVeia
     resolution
 }
 

@@ -17,7 +17,7 @@ class VeinSegment{
     endPoint
     thickness
     heart
-    points
+    Table points
     Table veinSections
     resolution
 }

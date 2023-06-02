@@ -7,8 +7,7 @@ class VeinSection():
         self.point = point
         self.thickness = thickness
         self.veinSegment = veinSegment
-
-   
+  
 class VeinSegment():
     def __init__(self, A, B, thickness, heart):
         self.A = A
