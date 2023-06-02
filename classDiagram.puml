@@ -1,0 +1,36 @@
+@startuml "classDiagram"
+
+class Heart{
+    size
+    pulse
+    Table veins 
+}
+
+class Point{
+    radius
+    phi
+    theta
+}
+
+class VeinSegment{
+    startPoint
+    endPoint
+    thickness
+    heart
+    points
+    Table veinSections
+    resolution
+}
+
+class VeinSection{
+    thickness
+    point
+    veinSegment
+}
+
+Heart -right-> VeinSegment
+VeinSegment -down-> Point
+VeinSegment -down-> VeinSection
+VeinSection -right-> Point
+
+@enduml

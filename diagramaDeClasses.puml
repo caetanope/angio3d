@@ -1,0 +1,36 @@
+@startuml "diagramaDeClasses"
+
+class Coração{
+    tamanho
+    pulso
+    Tabela segmentoDeVeias 
+}
+
+class Ponto{
+    raio
+    phi
+    theta
+}
+
+class SegmentoDeVeia{
+    pontoInicial
+    pointoFinal
+    espessura
+    coração
+    pontos
+    Tabela secçõeseVeia
+    resolution
+}
+
+class SecçãoDeVeia{
+    espessura
+    ponto
+    segmentoDeVeia
+}
+
+Coração -right-> SegmentoDeVeia
+SegmentoDeVeia -down-> Ponto
+SegmentoDeVeia -down-> SecçãoDeVeia
+SecçãoDeVeia -right-> Ponto
+
+@enduml
