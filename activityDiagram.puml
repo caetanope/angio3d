@@ -2,6 +2,22 @@
 
 start
 
+:read configuration;
+:setup heart;
+:setup veins;
+
+repeat :pulse value
+    repeat :perspective
+        :calculate pulse;
+        :plot image;
+        :capture frame;
+        :apply background effect;
+        :apply white noise;
+    repeat while
+repeat while
+
+:save generated images;
+
 stop
 
 @enduml
