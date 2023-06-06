@@ -8,9 +8,9 @@ start
 :setup stenosis;
 
 repeat :pulse value
+    :calculate pulse;
+    :plot heart;
     repeat :perspective
-        :calculate pulse;
-        :plot heart;
         :capture frame;
         :apply background effect;
         :apply white noise;

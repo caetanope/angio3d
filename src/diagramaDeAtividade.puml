@@ -8,9 +8,9 @@ start
 :setup estenose;
 
 repeat :valor do pulso
+    :calcular pulso;
+    :computar coração;
     repeat :perspectiva
-        :calcular pulso;
-        :computar coração;
         :capturar imagem;
         :aplicar efeito de fundo;
         :aplicar ruido branco;
