@@ -5,11 +5,12 @@ start
 :read configuration;
 :setup heart;
 :setup veins;
+:setup stenosis;
 
 repeat :pulse value
     repeat :perspective
         :calculate pulse;
-        :plot image;
+        :plot heart;
         :capture frame;
         :apply background effect;
         :apply white noise;

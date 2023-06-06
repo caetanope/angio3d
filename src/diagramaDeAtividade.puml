@@ -1,0 +1,24 @@
+@startuml activityDiagram
+
+start
+
+:ler configurações;
+:setup coração;
+:setup veias;
+:setup estenose;
+
+repeat :valor do pulso
+    repeat :perspectiva
+        :calcular pulso;
+        :computar coração;
+        :capturar imagem;
+        :aplicar efeito de fundo;
+        :aplicar ruido branco;
+    repeat while
+repeat while
+
+:salvar imagens geradas;
+
+stop
+
+@enduml
