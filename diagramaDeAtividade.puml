@@ -7,15 +7,13 @@ start
 :setup veias;
 :setup estenose;
 
-repeat :valor do pulso
-    :calcular pulso;
+repeat :calcular pulso; 
     :computar coração;
-    repeat :perspectiva
-        :capturar imagem;
+    repeat :capturar imagem; 
         :aplicar efeito de fundo;
         :aplicar ruido branco;
-    repeat while
-repeat while
+    repeat while (novo valor de pulso?) is (sim)
+repeat while (novo valor de perspectiva?) is (sim)
 
 :salvar imagens geradas;
 

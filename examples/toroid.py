@@ -16,7 +16,7 @@ v = np.linspace(0, np.pi, 100)
 
 radius = 1
 
-veinRadius = 0.1
+veinRadius = 0.5
 
 vein_u = np.linspace(0, 1 * np.pi, 100)
 vein_v = np.linspace(0, 2 * np.pi, 100)
@@ -34,4 +34,3 @@ ax.set_zlim3d([-1,1])
 plt.show()
 #break
 ax.clear()
-
