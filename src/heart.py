@@ -18,6 +18,7 @@ class Heart():
         return self.radius * self.deformation
     
     def generateStraightVein(self, A, B, resolution, thickness, parentThickness = 0):
+        resolution = 2
         vein = VeinSegment(A, B, thickness, self)
         vein.calculatePoints(resolution)
         vein.buildVeinSections()
@@ -49,7 +50,12 @@ class Heart():
 
     def plotVein(self, subplot, vein):
         for veinSection in vein:
-            subplot.plot(veinSection.point.x * self.deformation, 
-                         veinSection.point.y * self.deformation, 
-                         veinSection.point.z * self.deformation, 
-                         marker="o", markersize= veinSection.thickness*5, markeredgecolor="blue", markerfacecolor="green")
+            subplot.plot(veinSection.A.x * self.deformation, 
+                         veinSection.A.y * self.deformation, 
+                         veinSection.A.z * self.deformation, 
+                         marker="o", markersize= veinSection.thickness*100, markeredgecolor="blue", markerfacecolor="green")
+            subplot.plot(veinSection.B.x * self.deformation, 
+                         veinSection.B.y * self.deformation, 
+                         veinSection.B.z * self.deformation, 
+                         marker="o", markersize= veinSection.thickness*100, markeredgecolor="blue", markerfacecolor="green")
+            subplot.plot_surface(veinSection.X, veinSection.Y, veinSection.Z, rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)

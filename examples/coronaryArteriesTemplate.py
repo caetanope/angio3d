@@ -5,7 +5,7 @@ import numpy as np
 
 radius = 1
 counter = 0
-veinRadius = 1#0.02    
+veinRadius = 0.05#0.02    
 
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')

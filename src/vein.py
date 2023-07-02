@@ -1,12 +1,54 @@
-from trigonometry import cartesianToSpherical, calculateAreaFromDiameter, calculateDiameterFromArea
-from point import Point
+from trigonometry import *
+from point import *
 import numpy as np
 
+u = np.linspace(0, 2 * np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+
 class VeinSection():
-    def __init__(self, point, thickness, veinSegment):
-        self.point = point
+    def __init__(self, A, B, thickness, veinSegment):
+        self.A = A
+        self.B = B
         self.thickness = thickness
         self.veinSegment = veinSegment
+        self.generateVein()
+
+    def generateVein(self):
+        length = abs(calculateAnglePoints(self.A, self.B))
+        phi_begin = 0#-length/2
+        phi_end = length#/2
+
+        phi_begin = np.deg2rad(phi_begin)
+        phi_end = np.deg2rad(phi_end)
+
+        vein_u = np.linspace(phi_begin, phi_end, 100)
+        vein_v = np.linspace(0, 2 * np.pi, 100)
+
+        X = np.outer(np.cos(vein_u), self.veinSegment.heart.radius + self.thickness * np.cos(vein_v))
+        Y = np.outer(np.sin(vein_u), self.veinSegment.heart.radius + self.thickness * np.cos(vein_v)) 
+        Z = np.outer(np.ones(np.size(u)), self.thickness * np.sin(vein_v))
+        X,Y,Z = triAxisRotation(X,Y,Z,0,np.deg2rad(90),0)
+
+        if self.A.phi != 0 and self.A.theta !=0:
+            self.veinSegment.calculatePoints(3)
+            #ABC = Plane(self.A, self.B, self.veinSegment.points[1])
+            #origin = Plane(Point(0,90), Point(length,90), Point(length/2,90))
+            ABC = Vector(self.A,self.B)
+            origin = Vector(Point(0,0),Point(0,length))
+            rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),self.A.getDirectionVector())
+            self.veinSegment.calculatePoints(2)
+
+            for index in range(len(X)):
+                result = rotationMatrix.dot([X[index],Y[index],Z[index]])
+                X[index],Y[index],Z[index] = result
+
+        phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
+        endPoint = Point(phi,theta)
+        if pointsEqual(endPoint,self.B) == False:
+            angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
+            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+
+        self.X, self.Y, self.Z = X, Y, Z
   
 class VeinSegment():
     def __init__(self, A, B, thickness, heart):
@@ -32,19 +74,25 @@ class VeinSegment():
         dy = self.B.y - self.A.y
         dz = self.B.z - self.A.z
 
-        for iterator in range(resolution):
+        self.points = []
+        self.points.append(self.A)
+                
+        for iterator in range(1,resolution-1):
             xSemiPoint = self.A.x+iterator*dx/resolution
             ySemiPoint = self.A.y+iterator*dy/resolution
             zSemiPoint = self.A.z+iterator*dz/resolution
 
             phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
             self.points.append(Point(phi,theta,self.heart.getRadius(Point(phi,theta))))
+
+        self.points.append(self.B)            
             
         return self.points
     
     def buildVeinSections(self):
-        for point in self.points:
-            self.veinSections.append(VeinSection(point,self.thickness,self))
+        for index in range(len(self.points)-1):
+            self.veinSections.append(VeinSection(self.points[index], self.points[index+1],self.thickness,self))
+
 
     def adjustThicknessToParent(self, parentThickness):
         if parentThickness == 0:
@@ -56,7 +104,7 @@ class VeinSegment():
             if(index >= 10):
                 break
             thickness = self.thickness + ((10.0-index)/10.0)*(parentThickness-self.thickness)
-            self.veinSections[index] = VeinSection(veinSection.point,thickness,self)
+            self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
 
     def applyAneurysm(self, position, lenght, grade):
         t = 0
@@ -69,7 +117,7 @@ class VeinSegment():
                 factor = map_values(factor, -1, 1, (1 + grade), 1)
 
             thickness = self.thickness * factor
-            self.veinSections[index] = VeinSection(veinSection.point,thickness,self)
+            self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
 
     def applyStenosis(self, position, lenght, grade):
         t = 0
@@ -83,7 +131,7 @@ class VeinSegment():
                 factor = map_values(factor, -1, 1, (1 - grade), 1)
 
             thickness = self.thickness * factor
-            self.veinSections[index] = VeinSection(veinSection.point,thickness,self)
+            self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
 
     def getVeinSections(self):
         return self.veinSections
@@ -91,7 +139,7 @@ class VeinSegment():
     def applyThinning(self, finalThickness):
         for index, veinSection in enumerate(self.veinSections):
             thickness = finalThickness + (float(self.resolution-index)/self.resolution)*(veinSection.thickness - finalThickness)
-            self.veinSections[index] = VeinSection(veinSection.point,thickness,self)
+            self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
             
 
 def map_values(x, in_min, in_max, out_min, out_max):

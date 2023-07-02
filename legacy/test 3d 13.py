@@ -118,8 +118,8 @@ def calculateAnglePoints(A, B):
     file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/admin,+Artigo+Joselito+Rodson+2018+Final.pdf (22)
     '''
 
-    lenght = np.arccos( np.cos(a)*np.cos(b)*np.cos(A.phiR-B.phiR) 
-                        + np.sin(a)*np.sin(b))
+    lenght = np.arccos( np.cos(a)*np.cos(b) 
+                        + np.sin(a)*np.sin(b)*np.cos(A.phiR-B.phiR))
     return radToDeg(lenght)
 
 
