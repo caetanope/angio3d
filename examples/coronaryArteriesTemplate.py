@@ -3,6 +3,8 @@ from point import Point
 import matplotlib.pyplot as plt
 import numpy as np
 
+from vispy import io, plot as vp
+
 radius = 1
 counter = 0
 veinRadius = 0.02    
@@ -73,7 +75,7 @@ while(1):
     heart.plotHeart(subplot)    
     heart.plotVeins(subplot)
    
-    subplot.set_xlim3d([-1,1])
+    '''subplot.set_xlim3d([-1,1])
     subplot.set_ylim3d([-1,1]) 
     subplot.set_zlim3d([-1,1])
 
@@ -81,7 +83,7 @@ while(1):
     subplot.set_ylabel('Y')
     subplot.set_zlabel('Z')
 
-    subplot.set_box_aspect((1,1,1))
+    subplot.set_box_aspect((1,1,1))'''
 
     plt.draw()
     if plt.waitforbuttonpress(0.001):

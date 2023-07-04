@@ -1,29 +1,130 @@
+import sys
+
 import numpy as np
 
-from vispy import io, plot as vp
+from vispy import app, scene, io
+from vispy.visuals.transforms import STTransform
 
-fig = vp.Fig(bgcolor='k', size=(1800, 1200), show=False)
+# Read volume
+vol = np.load(io.load_data_file('volume/stent.npz'))['arr_0']
 
-vol_data = np.load(io.load_data_file('brain/mri.npz'))['data']
-vol_data = np.flipud(np.rollaxis(vol_data, 1))
-vol_data = vol_data.astype(np.float32)
+# Prepare canvas
+canvas = scene.SceneCanvas(keys='interactive', show=True)
+view = canvas.central_widget.add_view()
 
-clim = [32, 192]
-texture_format = "auto"  # None for CPUScaled, "auto" for GPUScaled
+# Create the volume visual for plane rendering
+plane = scene.visuals.Volume(
+    vol,
+    parent=view.scene,
+    raycasting_mode='plane',
+    method='mip',
+    plane_thickness=3.0,
+    plane_position=(128, 60, 64),
+    plane_normal=(1, 0, 0),
+)
 
-vol_pw = fig[0, 0]
-v = vol_pw.volume(vol_data, clim=clim, texture_format=texture_format)
-vol_pw.view.camera.elevation = 30
-vol_pw.view.camera.azimuth = 30
-vol_pw.view.camera.scale_factor /= 1.5
+volume = scene.visuals.Volume(
+    vol,
+    parent=view.scene,
+    raycasting_mode='volume',
+    method='mip',
+)
+volume.set_gl_state('additive')
+volume.opacity = 0.25
 
-shape = vol_data.shape
-fig[1, 0].image(vol_data[:, :, shape[2] // 2], cmap='grays', clim=clim,
-                fg_color=(0.5, 0.5, 0.5, 1), texture_format=texture_format)
-fig[0, 1].image(vol_data[:, shape[1] // 2, :], cmap='grays', clim=clim,
-                fg_color=(0.5, 0.5, 0.5, 1), texture_format=texture_format)
-fig[1, 1].image(vol_data[shape[0] // 2, :, :].T, cmap='grays', clim=clim,
-                fg_color=(0.5, 0.5, 0.5, 1), texture_format=texture_format)
+# Create a camera
+cam = scene.cameras.TurntableCamera(
+    parent=view.scene, fov=60.0, azimuth=-42.0, elevation=30.0
+)
+view.camera = cam
+
+# Create an XYZAxis visual
+axis = scene.visuals.XYZAxis(parent=view)
+s = STTransform(translate=(50, 50), scale=(50, 50, 50, 1))
+affine = s.as_matrix()
+axis.transform = affine
+
+
+def update_axis_visual():
+    """Sync XYZAxis visual with camera angles"""
+    axis.transform.reset()
+
+    axis.transform.rotate(cam.roll, (0, 0, 1))
+    axis.transform.rotate(cam.elevation, (1, 0, 0))
+    axis.transform.rotate(cam.azimuth, (0, 1, 0))
+    axis.transform.scale((50, 50, 0.001))
+    axis.transform.translate((50., 50.))
+
+    axis.update()
+
+
+update_axis_visual()
+
+
+@canvas.events.mouse_move.connect
+def on_mouse_move(event):
+    if event.button == 1 and event.is_dragging:
+        update_axis_visual()
+
+
+# Implement key presses
+@canvas.events.key_press.connect
+def on_key_press(event):
+    if event.text == '1':
+        methods = ['mip', 'average']
+        method = methods[(methods.index(plane.method) + 1) % 2]
+        print("Volume render method: %s" % method)
+        plane.method = method
+    elif event.text == '2':
+        modes = ['volume', 'plane']
+        if plane.raycasting_mode == modes[0]:
+            plane.raycasting_mode = modes[1]
+            print(modes[1])
+        else:
+            plane.raycasting_mode = modes[0]
+            print(modes[0])
+    elif event.text != '' and event.text in '{}':
+        t = -1 if event.text == '{' else 1
+        plane.plane_thickness += t
+        plane.plane_thickness += t
+        print(f"plane thickness: {plane.plane_thickness}")
+    elif event.text != '' and event.text in '[]':
+        shift = plane.plane_normal / np.linalg.norm(plane.plane_normal)
+        if event.text == '[':
+            plane.plane_position -= 2 * shift
+        elif event.text == ']':
+            plane.plane_position += 2 * shift
+        print(f"plane position: {plane.plane_position}")
+    elif event.text == 'x':
+        plane.plane_normal = [0, 0, 1]
+    elif event.text == 'y':
+        plane.plane_normal = [0, 1, 0]
+    elif event.text == 'z':
+        plane.plane_normal = [1, 0, 0]
+    elif event.text == 'o':
+        plane.plane_normal = [1, 1, 1]
+    elif event.text == ' ':
+        if timer.running:
+            timer.stop()
+        else:
+            timer.start()
+
+
+def move_plane(event):
+    z_pos = plane.plane_position[0]
+    if z_pos < 32:
+        plane.plane_position = plane.plane_position + [1, 0, 0]
+    elif 32 < z_pos <= 220:
+        plane.plane_position = plane.plane_position - [1, 0, 0]
+    else:
+        plane.plane_position = (220, 64, 64)
+
+
+timer = app.Timer('auto', connect=move_plane, start=True)
 
 if __name__ == '__main__':
-    fig.show(run=True)
+    canvas.show()
+    print(__doc__)
+    if sys.flags.interactive == 0:
+        plane.plane_position = (220, 64, 64)
+        app.run()

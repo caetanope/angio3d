@@ -60,7 +60,14 @@ class Heart():
                          veinSection.B.z * self.deformation, 
                          marker="o", markersize= veinSection.thickness*100, 
                          markeredgecolor="blue", markerfacecolor="green")'''
-            subplot.plot_surface(veinSection.X * self.deformation, 
+            '''subplot.plot_surface(veinSection.X * self.deformation, 
                                  veinSection.Y * self.deformation,
                                  veinSection.Z * self.deformation, 
-                                 rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
+                                 rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)'''
+            texture_format = "auto"  # None for CPUScaled, "auto" for GPUScaled
+            clim = [32, 192]
+            vol_data = [veinSection.X * self.deformation, 
+                        veinSection.Y * self.deformation,
+                        veinSection.Z * self.deformation]
+            subplot.volume(vol_data, clim=clim, texture_format=texture_format)
+            
