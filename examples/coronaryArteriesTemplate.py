@@ -5,7 +5,7 @@ import numpy as np
 
 radius = 1
 counter = 0
-veinRadius = 0.05#0.02    
+veinRadius = 0.02    
 
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
@@ -80,6 +80,8 @@ while(1):
     subplot.set_xlabel('X')
     subplot.set_ylabel('Y')
     subplot.set_zlabel('Z')
+
+    subplot.set_box_aspect((1,1,1))
 
     plt.draw()
     if plt.waitforbuttonpress(0.001):

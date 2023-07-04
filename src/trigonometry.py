@@ -85,7 +85,16 @@ def calculateAnglePointsFromOrigin(pointA,pointB,origin):
     A = np.deg2rad(90)
     a = lenght
     c = lenghtToCenter/2
-    result = np.rad2deg(2*np.arcsin(np.sin(A)*np.sin(c)/np.sin(a)))
+
+    sinA = np.sin(A)
+    sin_c = np.sin(c)
+    sin_a = np.sin(a)
+
+    arcsin = sinA*sin_c/sin_a
+    if arcsin > 1:
+        arcsin = 1
+
+    result = np.rad2deg(2*np.arcsin(arcsin))
     if isLeft(origin,pointA,pointB) == False:
         result *= -1
     return result

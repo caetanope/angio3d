@@ -15,8 +15,8 @@ class VeinSection():
 
     def generateVein(self):
         length = abs(calculateAnglePoints(self.A, self.B))
-        phi_begin = 0#-length/2
-        phi_end = length#/2
+        phi_begin = 0
+        phi_end = length
 
         phi_begin = np.deg2rad(phi_begin)
         phi_end = np.deg2rad(phi_end)
@@ -24,19 +24,17 @@ class VeinSection():
         vein_u = np.linspace(phi_begin, phi_end, 100)
         vein_v = np.linspace(0, 2 * np.pi, 100)
 
-        X = np.outer(np.cos(vein_u), self.veinSegment.heart.radius + self.thickness * np.cos(vein_v))
-        Y = np.outer(np.sin(vein_u), self.veinSegment.heart.radius + self.thickness * np.cos(vein_v)) 
+        X = np.outer(np.cos(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v))
+        Y = np.outer(np.sin(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v)) 
         Z = np.outer(np.ones(np.size(u)), self.thickness * np.sin(vein_v))
         X,Y,Z = triAxisRotation(X,Y,Z,0,np.deg2rad(90),0)
 
         if self.A.phi != 0 and self.A.theta !=0:
-            self.veinSegment.calculatePoints(3)
-            #ABC = Plane(self.A, self.B, self.veinSegment.points[1])
-            #origin = Plane(Point(0,90), Point(length,90), Point(length/2,90))
+            #self.veinSegment.calculatePoints(3)
             ABC = Vector(self.A,self.B)
             origin = Vector(Point(0,0),Point(0,length))
             rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),self.A.getDirectionVector())
-            self.veinSegment.calculatePoints(2)
+            #self.veinSegment.calculatePoints(2)
 
             for index in range(len(X)):
                 result = rotationMatrix.dot([X[index],Y[index],Z[index]])
