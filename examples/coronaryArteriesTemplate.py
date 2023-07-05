@@ -89,7 +89,7 @@ while(1):
     if plt.waitforbuttonpress(0.001):
         break
     
-    subplot.clear()
+    #subplot.clear()
 
     if counter >= 1000:
         break
