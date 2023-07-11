@@ -5,19 +5,19 @@ import numpy as np
 
 radius = 1
 counter = 0
-veinRadius = 1#0.02    
+veinRadius = 0.02    
 
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 
 heart = Heart(radius)
-vein = heart.generateSecondDegreVein(Point(0,0),Point(50,50),200,veinRadius,Point(25,25))
+vein = heart.generateSecondDegreVein(Point(0,0),Point(50,50),30,veinRadius,Point(25,25))
 Athickness, Bthickness = vein.calculateChildrenThickness(0.7)
-vein = heart.generateSecondDegreVein(Point(50,50),Point(60,70),200,Athickness,Point(55,60),veinRadius)
-vein = heart.generateSecondDegreVein(Point(50,50),Point(40,60),200,Bthickness,Point(45,55),veinRadius)
+vein = heart.generateSecondDegreVein(Point(50,50),Point(60,70),30,Athickness,Point(55,60),veinRadius)
+vein = heart.generateSecondDegreVein(Point(50,50),Point(40,60),30,Bthickness,Point(45,55),veinRadius)
 Athickness, Bthickness = vein.calculateChildrenThickness(0.7)
-vein = heart.generateSecondDegreVein(Point(40,60),Point(30,60),200,Athickness,Point(35,60),veinRadius)
-vein = heart.generateSecondDegreVein(Point(40,60),Point(35,55),200,Bthickness,Point(30,50),veinRadius)
+vein = heart.generateSecondDegreVein(Point(40,60),Point(30,60),30,Athickness,Point(35,60),veinRadius)
+vein = heart.generateSecondDegreVein(Point(40,60),Point(35,55),30,Bthickness,Point(30,50),veinRadius)
 
 while(1):
     counter += 1

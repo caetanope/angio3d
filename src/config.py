@@ -49,6 +49,11 @@ class VeinConfig():
         self.hasThinning = "thinning" in self.struct
         if self.hasThinning:
             self.thinning = self.struct["thinning"]
+
+        if "status" in self.struct:
+            self.disabled = self.struct["status"] == "disabled"
+        else:
+            self.disabled = False
         
         self.children = []
         if self.hasBranch:
@@ -61,5 +66,5 @@ class VeinConfig():
 def calculateVeinBranchRadius(parentRadius,daughter1Ratio):
     n = 2.5
     d1 = parentRadius*(daughter1Ratio**(1/n))
-    d2 = parentRadius*((daughter1Ratio-1)**(1/n))
+    d2 = parentRadius*((1-daughter1Ratio)**(1/n))
     return d1,d2

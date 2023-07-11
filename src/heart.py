@@ -50,6 +50,7 @@ class Heart():
     def plotVein(self, subplot, vein):
         for veinSection in vein:
 <<<<<<< HEAD
+<<<<<<< HEAD
             '''subplot.plot(veinSection.A.x * self.deformation, 
                          veinSection.A.y * self.deformation, 
                          veinSection.A.z * self.deformation, 
@@ -63,6 +64,16 @@ class Heart():
                          markeredgecolor="blue", markerfacecolor="green")'''
             '''subplot.plot_surface(veinSection.X * self.deformation, 
 =======
+=======
+            subplot.plot(veinSection.A.x * self.deformation, 
+                         veinSection.A.y * self.deformation, 
+                         veinSection.A.z * self.deformation, 
+                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")
+            subplot.plot(veinSection.B.x * self.deformation, 
+                         veinSection.B.y * self.deformation, 
+                         veinSection.B.z * self.deformation, 
+                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")
+>>>>>>> e39fb95 (working config)
             subplot.plot_surface(veinSection.X * self.deformation, 
 >>>>>>> b04230a (read from config)
                                  veinSection.Y * self.deformation,
