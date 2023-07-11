@@ -12,23 +12,43 @@ heartConfig = HeartConfig()
 
 heart = Heart(heartConfig.getSize())
 
+
+a = 0
 def plotVein(veinConfig, heart):
+    if veinConfig.disabled == True:
+        return
     if veinConfig.shape == 'straight':
-        vein = heart.generateStraightVein(veinConfig.begin,\
-                                          veinConfig.end,\
-                                          veinConfig.resolution,\
-                                          veinConfig.radius)
+        global a
+        a+=1
+        print(a, veinConfig.begin.phi, veinConfig.begin.theta, veinConfig.end.phi, veinConfig.end.theta, veinConfig.resolution, veinConfig.radius)
+        vein = heart.generateStraightVein(veinConfig.begin, veinConfig.end, veinConfig.resolution, veinConfig.radius)
     else:
         return
     if veinConfig.hasThinning:
         vein.applyThinning(veinConfig.thinning)
     if veinConfig.hasBranch:
         for veinChildConfig in veinConfig.children:
-            plotVein(veinConfig, heart)
+            plotVein(veinChildConfig, heart)
 
 for veinConfig in heartConfig.getVeinConfigs():
     plotVein(veinConfig, heart)
 
+heart.plotHeart(subplot)    
+heart.plotVeins(subplot)
+
+subplot.set_xlim3d([-1,1])
+subplot.set_ylim3d([-1,1]) 
+subplot.set_zlim3d([-1,1])
+
+subplot.set_xlabel('X')
+subplot.set_ylabel('Y')
+subplot.set_zlabel('Z')
+
+subplot.set_box_aspect((1,1,1))
+
+plt.show()
+
+'''
 while(1):
     counter += 1
 
@@ -54,3 +74,4 @@ while(1):
 
     if counter >= 1000:
         break
+'''
