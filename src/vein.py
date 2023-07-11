@@ -29,13 +29,12 @@ class VeinSection():
         Z = np.outer(np.ones(np.size(u)), self.thickness * np.sin(vein_v))
         X,Y,Z = triAxisRotation(X,Y,Z,0,np.deg2rad(90),0)
 
-        if self.A.phi != 0 and self.A.theta !=0:
-            #self.veinSegment.calculatePoints(3)
+        if self.A.phi != 0 or self.A.theta !=0:
             ABC = Vector(self.A,self.B)
             origin = Vector(Point(0,0),Point(0,length))
-            rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),self.A.getDirectionVector())
-            #self.veinSegment.calculatePoints(2)
-
+            rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),\
+                                                          self.A.getDirectionVector())
+            
             for index in range(len(X)):
                 result = rotationMatrix.dot([X[index],Y[index],Z[index]])
                 X[index],Y[index],Z[index] = result

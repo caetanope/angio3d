@@ -1,0 +1,194 @@
+{
+  "heart": {
+    "size": 1,
+    "veins": [
+      {
+        "status": "enabled",
+        "name": "RCA",
+        "radius": 0.02,
+        "shape": "straight",
+        "begin": {
+          "phi": -90,
+          "theta": 15
+        },
+        "end": {
+          "phi": -90,
+          "theta": 25
+        },
+        "resolution": 5,
+        "branch": {
+          "ratio": 0.2,
+          "veins": [
+            {
+              "shape": "straight",
+              "end": {
+                "phi": -50,
+                "theta": 30
+              },
+              "resolution": 5,
+              "thinning": 0
+            },
+            {
+              "shape": "straight",
+              "end": {
+                "phi": -90,
+                "theta": 55
+              },
+              "resolution": 5,
+              "branch": {
+                "ratio": 0.2,
+                "veins": [
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -45,
+                      "theta": 70
+                    },
+                    "resolution": 5,
+                    "thinning": 0
+                  },
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -90,
+                      "theta": 90
+                    },
+                    "resolution": 5,
+                    "thinning": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "LCA",
+        "radius": 0.02,
+        "shape": "straight",
+        "begin": {
+          "phi": 0,
+          "theta": 0
+        },
+        "end": {
+          "phi": 0,
+          "theta": 15
+        },
+        "resolution": 5,
+        "branch": {
+          "ratio": 0.5,
+          "veins": [
+            {
+              "status": "enabled",
+              "shape": "straight",
+              "end": {
+                "phi": 50,
+                "theta": 90
+              },
+              "resolution": 5
+            },
+            {
+              "status": "enabled",
+              "shape": "straight",
+              "end": {
+                "phi": -20,
+                "theta": 50
+              },
+              "resolution": 5,
+              "branch": {
+                "ratio": 0.1,
+                "veins": [
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -35,
+                      "theta": 70
+                    },
+                    "resolution": 5
+                  },
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -20,
+                      "theta": 55
+                    },
+                    "resolution": 5,
+                    "branch": {
+                      "ratio": 0.4,
+                      "veins": [
+                        {
+                          "status": "enabled",
+                          "shape": "straight",
+                          "end": {
+                            "phi": 0,
+                            "theta": 105
+                          },
+                          "resolution": 5,
+                          "thinning": 0
+                        },
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -20,
+                            "theta": 80
+                          },
+                          "resolution": 5,
+                          "branch": {
+                            "ratio": 0.4,
+                            "veins": [
+                              {
+                                "shape": "straight",
+                                "end": {
+                                  "phi": -10,
+                                  "theta": 120
+                                },
+                                "resolution": 5,
+                                "thinning": 0
+                              },
+                              {
+                                "status": "enabled",
+                                "shape": "straight",
+                                "end": {
+                                  "phi": -20,
+                                  "theta": 85
+                                },
+                                "resolution": 5,
+                                "branch": {
+                                  "ratio": 0.7,
+                                  "veins": [
+                                    {
+                                      "shape": "straight",
+                                      "end": {
+                                        "phi": -30,
+                                        "theta": 100
+                                      },
+                                      "resolution": 5,
+                                      "thinning": 0
+                                    },
+                                    {
+                                      "shape": "straight",
+                                      "end": {
+                                        "phi": -20,
+                                        "theta": 150
+                                      },
+                                      "resolution": 5,
+                                      "thinning": 0
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

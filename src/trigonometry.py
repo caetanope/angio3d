@@ -100,7 +100,7 @@ def calculateAnglePointsFromOrigin(pointA,pointB,origin):
     return result
 
 def isLeft(a, b, c):
-     return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) > 0
+     return False# ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) > 0
 
 def calculateAnglePoints(A, B):
     #file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/Trigonometria%20Esferica.pdf
@@ -200,3 +200,4 @@ def rotation_matrix_from_vectors(vec1, vec2):
     kmat = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
     rotation_matrix = np.eye(3) + kmat + kmat.dot(kmat) * ((1 - c) / (s ** 2))
     return rotation_matrix
+
