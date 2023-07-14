@@ -17,22 +17,6 @@ class Heart():
     def getRadius(self, point = Point(0,0)):
         return self.radius * self.deformation
     
-    def generateStraightVein(self, A, B, resolution, thickness, parentThickness = 0):
-        vein = VeinSegment(A, B, thickness, self)
-        vein.calculatePoints(resolution)
-        vein.buildVeinSections()
-        vein.adjustThicknessToParent(parentThickness)
-        self.veins.append(vein)
-        return vein
-
-    def generateSecondDegreVein(self, A, B, resolution, thickness, midPoint, parentThickness = 0):
-        vein = SecondDegreeVeinSegment(A, B, thickness, self)
-        vein.calculatePoints(resolution, midPoint)
-        vein.buildVeinSections()
-        vein.adjustThicknessToParent(parentThickness)
-        self.veins.append(vein)
-        return vein
-
     def getHeart(self):
         x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
         y = self.getRadius() * np.outer(np.sin(u), np.sin(v))
@@ -44,7 +28,9 @@ class Heart():
         subplot.plot_surface(x, y, z,  rstride=4, cstride=4, color='r', linewidth=0, alpha=0.5)
 
     def plotVeins(self, subplot):
+        print("A")
         for vein in self.veins:
+            print(vein)
             self.plotVein(subplot, vein.getVeinSections())
 
     def plotVein(self, subplot, vein):

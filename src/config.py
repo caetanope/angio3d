@@ -14,13 +14,16 @@ class HeartConfig():
     def getVeinConfigs(self):
         veinConfigs = []
         for veinStruct in _getConfigHeart()["veins"]:
-            veinConfigs.append(VeinConfig(veinStruct))
+            veinConfigs.append(VeinConfig(veinStruct, False))
         return veinConfigs
 
 class VeinConfig():
-    def __init__(self,veinStruct, begin=False, radius=False):
+    def __init__(self, veinStruct, parent, begin=False, radius=False):
         
         self.struct = veinStruct
+        self.parent = parent
+
+        self.hasParent = parent != False
 
         if radius != False:
             self.radius = radius
@@ -60,8 +63,8 @@ class VeinConfig():
             veinStruct1 = self.branch["veins"][0]
             veinStruct2 = self.branch["veins"][1]
             d1,d2 = calculateVeinBranchRadius(self.radius,self.branch["ratio"])
-            self.children.append(VeinConfig(veinStruct1,self.end,d1))
-            self.children.append(VeinConfig(veinStruct2,self.end,d2))           
+            self.children.append(VeinConfig(veinStruct1,self,self.end,d1))
+            self.children.append(VeinConfig(veinStruct2,self,self.end,d2))           
 
 def calculateVeinBranchRadius(parentRadius,daughter1Ratio):
     n = 2.5
