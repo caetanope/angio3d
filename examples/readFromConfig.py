@@ -1,37 +1,56 @@
 from heart import Heart
-from point import Point
 from config import *
 import matplotlib.pyplot as plt
-import numpy as np
+from multiprocessing import Process, Pipe
+from vein import *
 
-counter = 0
+veinConfigs = []
 
+def appendVeinConfigs(veinConfig):
+    if veinConfig.disabled == True:
+        return
+    veinConfigs.append(veinConfig)
+    if veinConfig.hasBranch:
+        for veinChildConfig in veinConfig.children:
+            appendVeinConfigs(veinChildConfig)
+
+def generateVein(veinConfig, heart, child_conn):
+    if veinConfig.shape == 'straight':
+        vein = VeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, heart)
+    elif veinConfig.shape == 'secondDegree':
+        vein = SecondDegreeVeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, heart)
+    else:
+        return
+    vein.calculatePoints(veinConfig.resolution)
+    vein.buildVeinSections()
+    if veinConfig.hasParent:
+        vein.adjustThicknessToParent(veinConfig.parent.radius)
+    if veinConfig.hasThinning:
+        vein.applyThinning(veinConfig.thinning)
+    child_conn.send(vein)
+    child_conn.close()
+       
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 heartConfig = HeartConfig()
 
 heart = Heart(heartConfig.getSize())
-
-
-a = 0
-def plotVein(veinConfig, heart):
-    if veinConfig.disabled == True:
-        return
-    if veinConfig.shape == 'straight':
-        global a
-        a+=1
-        print(a, veinConfig.begin.phi, veinConfig.begin.theta, veinConfig.end.phi, veinConfig.end.theta, veinConfig.resolution, veinConfig.radius)
-        vein = heart.generateStraightVein(veinConfig.begin, veinConfig.end, veinConfig.resolution, veinConfig.radius)
-    else:
-        return
-    if veinConfig.hasThinning:
-        vein.applyThinning(veinConfig.thinning)
-    if veinConfig.hasBranch:
-        for veinChildConfig in veinConfig.children:
-            plotVein(veinChildConfig, heart)
-
 for veinConfig in heartConfig.getVeinConfigs():
-    plotVein(veinConfig, heart)
+    appendVeinConfigs(veinConfig)
+
+jobs = []
+for veinConfig in veinConfigs:
+    parent_conn, child_conn = Pipe()
+    job = Process(target=generateVein, args=(veinConfig,heart,child_conn))
+    job.start()
+    jobs.append((job,parent_conn))
+
+for job,parent_conn in jobs:
+    result = parent_conn.recv()
+    print(result)
+    heart.veins.append(result)
+    print(job)
+    job.join()
 
 heart.plotHeart(subplot)    
 heart.plotVeins(subplot)
@@ -49,13 +68,14 @@ subplot.set_box_aspect((1,1,1))
 plt.show()
 
 '''
+counter = 0
 while(1):
     counter += 1
 
     heart.setPulse(np.sin(counter/20)*0.1 + 0.9)
     heart.plotHeart(subplot)    
     heart.plotVeins(subplot)
-   
+
     subplot.set_xlim3d([-1,1])
     subplot.set_ylim3d([-1,1]) 
     subplot.set_zlim3d([-1,1])

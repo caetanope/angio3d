@@ -90,7 +90,6 @@ class VeinSegment():
         for index in range(len(self.points)-1):
             self.veinSections.append(VeinSection(self.points[index], self.points[index+1],self.thickness,self))
 
-
     def adjustThicknessToParent(self, parentThickness):
         if parentThickness == 0:
             return
