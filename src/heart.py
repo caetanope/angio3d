@@ -18,6 +18,11 @@ class Heart():
         return self.radius * self.deformation
     
     def getHeart(self):
+        for phi in u:
+            for theta in v:
+                point = Point(phi,theta)
+                radius = self.getRadius(point)
+                x = radius*np.cos(phi)*np.sin(theta)
         x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
         y = self.getRadius() * np.outer(np.sin(u), np.sin(v))
         z = self.getRadius() * np.outer(np.ones(np.size(u)), np.cos(v))
@@ -35,14 +40,14 @@ class Heart():
 
     def plotVein(self, subplot, vein):
         for veinSection in vein:
-            subplot.plot(veinSection.A.x * self.deformation, 
+            '''subplot.plot(veinSection.A.x * self.deformation, 
                          veinSection.A.y * self.deformation, 
                          veinSection.A.z * self.deformation, 
                          marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")
             subplot.plot(veinSection.B.x * self.deformation, 
                          veinSection.B.y * self.deformation, 
                          veinSection.B.z * self.deformation, 
-                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")
+                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")'''
             subplot.plot_surface(veinSection.X * self.deformation, 
                                  veinSection.Y * self.deformation,
                                  veinSection.Z * self.deformation, 

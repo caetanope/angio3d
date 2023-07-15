@@ -50,10 +50,8 @@ if __name__ == '__main__':
         jobs.append((job,parent_conn))
 
     for job,parent_conn in jobs:
-        result = parent_conn.recv()
-        print(result)
-        heart.veins.append(result)
-        print(job)
+        vein = parent_conn.recv()
+        heart.veins.append(vein)
         job.join()
 
     heart.plotHeart(subplot)    
