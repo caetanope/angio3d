@@ -1,6 +1,5 @@
 import numpy as np
 from point import Point
-import quaternion
 
 def cartesianToSpherical(x,y,z):
     r = getRadius(x, y, z)

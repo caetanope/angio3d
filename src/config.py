@@ -5,6 +5,23 @@ from point import Point
 file = open(sys.argv[1])
 config = json.load(file)
 
+def _getConfigDataset():
+    return config["dataset"]
+
+class AxisRotation():
+    def __init__(self,axisStruct):
+        self.begin = axisStruct["begin"]
+        self.end = axisStruct["end"]
+        self.numberOfSteps = axisStruct["numberOfSteps"]
+        self.struct = axisStruct
+
+class DatasetConfig():
+    def __init__(self):
+        datasetStruct = _getConfigDataset()
+        self.x = AxisRotation(datasetStruct["x"])
+        self.y = AxisRotation(datasetStruct["y"])
+        self.z = AxisRotation(datasetStruct["z"])
+
 def _getConfigHeart():
     return config["heart"]
    

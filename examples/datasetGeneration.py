@@ -1,5 +1,6 @@
 import os
 import sys
+import matplotlib.pyplot as plt
 from multiprocessing import Process, Pipe
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
@@ -7,8 +8,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
 from heart import HeartPlot
 from config import *
 
-if __name__ == '__main__':
-    
+
+def buildHeart():
     heartConfig = HeartConfig()
     heartPlot = HeartPlot(heartConfig)
     heartPlot.mapVeins()
@@ -25,33 +26,10 @@ if __name__ == '__main__':
         job.join()
 
     heartPlot.setupPlot()
-    heartPlot.showPlot()
+    #heartPlot.show()
+    return heartPlot
 
-    '''
-    counter = 0
-    while(1):
-        counter += 1
-
-        heart.setPulse(np.sin(counter/20)*0.1 + 0.9)
-        heart.plotHeart(subplot)    
-        heart.plotVeins(subplot)
-
-        subplot.set_xlim3d([-1,1])
-        subplot.set_ylim3d([-1,1]) 
-        subplot.set_zlim3d([-1,1])
-
-        subplot.set_xlabel('X')
-        subplot.set_ylabel('Y')
-        subplot.set_zlabel('Z')
-
-        subplot.set_box_aspect((1,1,1))
-
-        plt.draw()
-        if plt.waitforbuttonpress(0.001):
-            break
-        
-        subplot.clear()
-
-        if counter >= 1000:
-            break
-    '''
+if __name__ == '__main__':
+    heartPlot = buildHeart()
+    #heartPlot.showPlot()
+    heartPlot.saveToFile()
