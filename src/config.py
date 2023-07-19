@@ -1,9 +1,28 @@
 import json
 import sys
 from point import Point
+import numpy as np
 
 file = open(sys.argv[1])
 config = json.load(file)
+
+def _getConfigDataset():
+    return config["dataset"]
+
+class AxisRotation():
+    def __init__(self,axisStruct):
+        self.begin = axisStruct["begin"]
+        self.end = axisStruct["end"]
+        self.numberOfSteps = axisStruct["numberOfSteps"]
+        self.struct = axisStruct
+        self.range = np.arange(self.begin, self.end, (self.end-self.begin)/self.numberOfSteps )
+
+class DatasetConfig():
+    def __init__(self):
+        datasetStruct = _getConfigDataset()
+        self.x = AxisRotation(datasetStruct["rotate"]["x"])
+        self.y = AxisRotation(datasetStruct["rotate"]["y"])
+        self.z = AxisRotation(datasetStruct["rotate"]["z"])
 
 def _getConfigHeart():
     return config["heart"]

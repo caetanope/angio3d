@@ -1,78 +1,31 @@
-from heart import Heart
-from config import *
-import matplotlib.pyplot as plt
+import os
+import sys
 from multiprocessing import Process, Pipe
-from vein import *
 
-veinConfigs = []
+sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
 
-def appendVeinConfigs(veinConfig):
-    if veinConfig.disabled == True:
-        return
-    veinConfigs.append(veinConfig)
-    if veinConfig.hasBranch:
-        for veinChildConfig in veinConfig.children:
-            appendVeinConfigs(veinChildConfig)
+from heart import HeartPlot
+from config import *
 
-def generateVein(veinConfig, heart, child_conn):
-    if veinConfig.shape == 'straight':
-        vein = VeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, heart)
-    elif veinConfig.shape == 'secondDegree':
-        vein = SecondDegreeVeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, heart)
-    else:
-        return
-    vein.calculatePoints(veinConfig.resolution)
-    vein.buildVeinSections()
-    if veinConfig.hasParent:
-        vein.adjustThicknessToParent(veinConfig.parent.radius)
-    if veinConfig.hasThinning:
-        vein.applyThinning(veinConfig.thinning)
-    child_conn.send(vein)
-    child_conn.close()
-       
 if __name__ == '__main__':
-    fig = plt.figure()
-    subplot = fig.add_subplot(111, projection='3d')
-    #img = plt.imread("examples/teste.jpg")
-    #subplot.imshow(img extent=[-5, 80, -5, 30])
     
     heartConfig = HeartConfig()
-
-    heart = Heart(heartConfig.getSize())
-    for veinConfig in heartConfig.getVeinConfigs():
-        appendVeinConfigs(veinConfig)
-
+    heartPlot = HeartPlot(heartConfig)
+    heartPlot.mapVeins()
     jobs = []
-    for veinConfig in veinConfigs:
+    for veinConfig in heartPlot.veinConfigs:
         parent_conn, child_conn = Pipe()
-        job = Process(target=generateVein, args=(veinConfig,heart,child_conn))
+        job = Process(target=heartPlot.generateVein, args=(veinConfig,child_conn))
         job.start()
         jobs.append((job,parent_conn))
 
     for job,parent_conn in jobs:
-        result = parent_conn.recv()
-        print(result)
-        heart.veins.append(result)
-        print(job)
+        vein = parent_conn.recv()
+        heartPlot.heart.veins.append(vein)
         job.join()
 
-    heart.plotHeart(subplot)    
-    heart.plotVeins(subplot)
-
-    subplot.set_xlim3d([-1,1])
-    subplot.set_ylim3d([-1,1]) 
-    subplot.set_zlim3d([-1,1])
-
-    subplot.set_xlabel('X')
-    subplot.set_ylabel('Y')
-    subplot.set_zlabel('Z')
-
-    subplot.set_frame_on(False)
-    subplot.set_axis_off()  
-
-    subplot.set_box_aspect((1,1,1))
-
-    plt.show()
+    heartPlot.setupPlot()
+    heartPlot.showPlot()
 
     '''
     counter = 0
