@@ -29,9 +29,7 @@ class Heart():
         subplot.plot_surface(x, y, z,  rstride=4, cstride=4, color='r', linewidth=0, alpha=0.5)
 
     def plotVeins(self, subplot):
-        print("A")
         for vein in self.veins:
-            print(vein)
             self.plotVein(subplot, vein.getVeinSections())
 
     def plotVein(self, subplot, vein):
@@ -70,7 +68,7 @@ class HeartPlot():
         for veinConfig in self.config.getVeinConfigs():
             self.appendVeinConfigs(veinConfig)
 
-    def plotVeins(self, childConn = False, heart = False):
+    def plotVeins(self, childConn = False):
         for veinConfig in self.veinConfigs:
             self.generateVein(veinConfig, childConn = childConn)
     
@@ -114,6 +112,13 @@ class HeartPlot():
 
         self.subplot.set_box_aspect((1,1,1))
 
+    def rotateView(self,rotateX,rotateY):
+        self.rotateX = rotateX
+        self.rotateY = rotateY
+        self.subplot.view_init(rotateX,rotateY)
+
     def saveToFile(self,path):
-        pass
+        imageExtention = '.png'
+        imageName = str(int(self.rotateX)) + "_" + str(int(self.rotateY))
+        plt.savefig(path+imageName+imageExtention)
     
