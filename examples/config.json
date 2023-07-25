@@ -4,22 +4,26 @@
       "x": {
         "begin": 0,
         "end": 360,
-        "numberOfSteps": 10
+        "numberOfSteps": 1
       },
       "y": {
-        "begin": 0,
+        "begin": 304,
         "end": 360,
-        "numberOfSteps": 10
+        "numberOfSteps": 1
       },
       "z": {
         "begin": 0,
         "end": 360,
-        "numberOfSteps": 10
+        "numberOfSteps": 1
       }
-    }
+    },
+    "numberOfHearts": 10,
+    "save": true
   },
   "heart": {
     "size": 1,
+    "status": "enabled",
+    "wireFrame": false,
     "veins": [
       {
         "status": "enabled",
@@ -27,26 +31,31 @@
         "radius": 0.02,
         "variation": 0.1,
         "shape": "straight",
+        "aneurysm":{
+          "position": 2,
+          "lenght": 1,
+          "grade": 0.5
+        },
         "begin": {
-          "phi": -90,
-          "theta": 15,
+          "phi": -70,
+          "theta": 45,
           "variation": 0.1
         },
         "end": {
-          "phi": -90,
-          "theta": 25,
+          "phi": -70,
+          "theta": 65,
           "variation": 0.1
         },
         "resolution": 5,
-        "branch": {
-          "ratio": 0.2,
+        "branch":{
+          "ratio": 0.3,
           "variation": 0.1,
           "veins": [
             {
               "shape": "straight",
               "end": {
                 "phi": -50,
-                "theta": 30,
+                "theta": 70,
                 "variation": 0.1
               },
               "resolution": 5,
@@ -55,35 +64,16 @@
             {
               "shape": "straight",
               "end": {
-                "phi": -90,
-                "theta": 55,
+                "phi": -75,
+                "theta": 80,
                 "variation": 0.1
               },
               "resolution": 5,
               "branch": {
-                "ratio": 0.2,
+                "ratio": 0.3,
                 "variation": 0.1,
                 "veins": [
-                  {
-                    "shape": "straight",
-                    "end": {
-                      "phi": -45,
-                      "theta": 70,
-                      "variation": 0.1
-                    },
-                    "resolution": 5,
-                    "thinning": 0
-                  },
-                  {
-                    "shape": "straight",
-                    "end": {
-                      "phi": -90,
-                      "theta": 90,
-                      "variation": 0.1
-                    },
-                    "resolution": 5,
-                    "thinning": 0
-                  }
+                  
                 ]
               }
             }
@@ -96,133 +86,16 @@
         "variation": 0.1,
         "shape": "straight",
         "begin": {
-          "phi": 0,
-          "theta": 0,
+          "phi": -40,
+          "theta": 40,
           "variation": 0.1
         },
         "end": {
-          "phi": 0,
-          "theta": 15,
+          "phi": -10,
+          "theta": 50,
           "variation": 0.1
         },
-        "resolution": 5,
-        "branch": {
-          "ratio": 0.5,
-          "variation": 0.1,
-          "veins": [
-            {
-              "status": "enabled",
-              "shape": "straight",
-              "end": {
-                "phi": 50,
-                "theta": 90,
-                "variation": 0.1
-              },
-              "resolution": 5
-            },
-            {
-              "status": "enabled",
-              "shape": "straight",
-              "end": {
-                "phi": -20,
-                "theta": 50,
-                "variation": 0.1
-              },
-              "resolution": 5,
-              "branch": {
-                "ratio": 0.1,
-                "variation": 0.1,
-                "veins": [
-                  {
-                    "shape": "straight",
-                    "end": {
-                      "phi": -35,
-                      "theta": 70
-                    },
-                    "resolution": 5
-                  },
-                  {
-                    "shape": "straight",
-                    "end": {
-                      "phi": -20,
-                      "theta": 55
-                    },
-                    "resolution": 5,
-                    "branch": {
-                      "ratio": 0.4,
-                      "veins": [
-                        {
-                          "status": "enabled",
-                          "shape": "straight",
-                          "end": {
-                            "phi": 0,
-                            "theta": 105
-                          },
-                          "resolution": 5,
-                          "thinning": 0
-                        },
-                        {
-                          "shape": "straight",
-                          "end": {
-                            "phi": -20,
-                            "theta": 80
-                          },
-                          "resolution": 5,
-                          "branch": {
-                            "ratio": 0.4,
-                            "veins": [
-                              {
-                                "shape": "straight",
-                                "end": {
-                                  "phi": -10,
-                                  "theta": 120
-                                },
-                                "resolution": 5,
-                                "thinning": 0
-                              },
-                              {
-                                "status": "enabled",
-                                "shape": "straight",
-                                "end": {
-                                  "phi": -20,
-                                  "theta": 85
-                                },
-                                "resolution": 5,
-                                "branch": {
-                                  "ratio": 0.7,
-                                  "veins": [
-                                    {
-                                      "shape": "straight",
-                                      "end": {
-                                        "phi": -30,
-                                        "theta": 100
-                                      },
-                                      "resolution": 5,
-                                      "thinning": 0
-                                    },
-                                    {
-                                      "shape": "straight",
-                                      "end": {
-                                        "phi": -20,
-                                        "theta": 150
-                                      },
-                                      "resolution": 5,
-                                      "thinning": 0
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+        "resolution": 5
       }
     ]
   }
