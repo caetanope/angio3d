@@ -1,0 +1,48 @@
+{
+  "dataset": {
+    "rotate": {
+      "x": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      },
+      "y": {
+        "begin": 304,
+        "end": 360,
+        "numberOfSteps": 1
+      },
+      "z": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      }
+    },
+    "numberOfHearts": 10,
+    "save": true
+  },
+  "heart": {
+    "size": 1,
+    "status": "enabled",
+    "wireFrame": false,
+    "veins": [
+      {
+        "status": "enabled",
+        "name": "RCA",
+        "radius": 0.02,
+        "variation": 0.1,
+        "shape": "straight",
+        "begin": {
+          "phi": -80,
+          "theta": 90,
+          "variation": 0.1
+        },
+        "end": {
+          "phi": -105,
+          "theta": 120,
+          "variation": 0.1
+        },
+        "resolution": 5
+      }
+    ]
+  }
+}

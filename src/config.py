@@ -23,18 +23,44 @@ class DatasetConfig():
         self.x = AxisRotation(datasetStruct["rotate"]["x"])
         self.y = AxisRotation(datasetStruct["rotate"]["y"])
         self.z = AxisRotation(datasetStruct["rotate"]["z"])
+        self.save = datasetStruct["save"]
 
 def _getConfigHeart():
     return config["heart"]
    
 class HeartConfig():
-    def getSize(self):
-        return _getConfigHeart()["size"]
-    def getVeinConfigs(self):
-        veinConfigs = []
+    def __init__(self):
+        self.struct = _getConfigHeart()
+        
+        if "status" in self.struct:
+            self.disabled = self.struct["status"] == "disabled"
+        else:
+            self.disabled = False
+        
+        self.size = self.struct["size"]
+        
+        self.veinConfigs = []
         for veinStruct in _getConfigHeart()["veins"]:
-            veinConfigs.append(VeinConfig(veinStruct, False))
-        return veinConfigs
+            self.veinConfigs.append(VeinConfig(veinStruct, False))
+                
+        if "wireFrame" in self.struct:
+            self.wireFrame = self.struct["wireFrame"]
+        else:
+            self.wireFrame = False
+
+class Stenosis():
+    def __init__(self,struct):
+        self.struct = struct
+        self.position = struct["position"]
+        self.lenght = struct["lenght"]
+        self.grade = struct["grade"]
+
+class Aneurysm():
+    def __init__(self,struct):
+        self.struct = struct
+        self.position = struct["position"]
+        self.lenght = struct["lenght"]
+        self.grade = struct["grade"]
 
 class VeinConfig():
     def __init__(self, veinStruct, parent, begin=False, radius=False):
@@ -57,8 +83,17 @@ class VeinConfig():
     
         end = self.struct["end"]
         self.end = Point(end["phi"],end["theta"])
+
+        self.hasStenosis = "stenosis" in self.struct
+        if self.hasStenosis:
+            self.stenosis = Stenosis(self.struct["stenosis"])
+
+        self.hasAneurysm = "aneurysm" in self.struct
+        if self.hasAneurysm:
+            self.aneurysm = Aneurysm(self.struct["aneurysm"])
         
-        if "name" in self.struct: 
+        self.hasName = "name" in self.struct
+        if self.hasName:
             self.name = self.struct["name"] 
         self.shape = self.struct["shape"]        
         self.resolution = self.struct["resolution"]

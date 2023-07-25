@@ -93,9 +93,10 @@ def calculateAnglePointsFromOrigin(pointA,pointB,origin):
     if arcsin > 1:
         arcsin = 1
 
-    result = np.rad2deg(2*np.arcsin(arcsin))
-    if isLeft(origin,pointA,pointB) == False:
-        result *= -1
+    result = -np.rad2deg(2*np.arcsin(arcsin))
+    #if isLeft(origin,pointA,pointB) == False:
+    #    print("oi")
+    #    result *= -1
     return result
 
 def isLeft(a, b, c):

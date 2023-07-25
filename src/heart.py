@@ -2,15 +2,18 @@ import numpy as np
 from point import Point
 from vein import *
 import matplotlib.pyplot as plt
+from datetime import datetime  
+import time  
 
 u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
 
 class Heart():
-    def __init__(self, radius):
+    def __init__(self, radius, wireFrame):
         self.radius = radius
         self.deformation = 1
         self.veins = []
+        self.wireFrame = wireFrame
 
     def setPulse(self, deformation):
         self.deformation = deformation
@@ -34,18 +37,28 @@ class Heart():
 
     def plotVein(self, subplot, vein):
         for veinSection in vein:
-            '''subplot.plot(veinSection.A.x * self.deformation, 
-                         veinSection.A.y * self.deformation, 
-                         veinSection.A.z * self.deformation, 
-                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")
-            subplot.plot(veinSection.B.x * self.deformation, 
-                         veinSection.B.y * self.deformation, 
-                         veinSection.B.z * self.deformation, 
-                         marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="green")'''
-            subplot.plot_surface(veinSection.X * self.deformation, 
-                                 veinSection.Y * self.deformation,
-                                 veinSection.Z * self.deformation, 
-                                 rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
+            if self.wireFrame:
+                subplot.plot(veinSection.A.x * self.deformation, 
+                            veinSection.A.y * self.deformation, 
+                            veinSection.A.z * self.deformation, 
+                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
+                subplot.plot(veinSection.B.x * self.deformation, 
+                            veinSection.B.y * self.deformation, 
+                            veinSection.B.z * self.deformation, 
+                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
+            else:
+                subplot.plot_surface(veinSection.X * self.deformation, 
+                                     veinSection.Y * self.deformation,
+                                     veinSection.Z * self.deformation, 
+                                     rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
+                subplot.plot(veinSection.A.x * self.deformation, 
+                            veinSection.A.y * self.deformation, 
+                            veinSection.A.z * self.deformation, 
+                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
+                subplot.plot(veinSection.B.x * self.deformation, 
+                            veinSection.B.y * self.deformation, 
+                            veinSection.B.z * self.deformation, 
+                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
             
 
 class HeartPlot():
@@ -54,7 +67,7 @@ class HeartPlot():
         self.veinConfigs = []
         self.fig = plt.figure()
         self.subplot = self.fig.add_subplot(111, projection='3d')
-        self.heart = Heart(self.config.getSize())
+        self.heart = Heart(config.size,self.config.wireFrame)
 
     def appendVeinConfigs(self,veinConfig):
         if veinConfig.disabled == True:
@@ -65,7 +78,7 @@ class HeartPlot():
                 self.appendVeinConfigs(veinChildConfig)
 
     def mapVeins(self):
-        for veinConfig in self.config.getVeinConfigs():
+        for veinConfig in self.config.veinConfigs:
             self.appendVeinConfigs(veinConfig)
 
     def plotVeins(self, childConn = False):
@@ -74,12 +87,16 @@ class HeartPlot():
     
     def generateVein(self, veinConfig, childConn = False):
         vein = self._getVeinFromConfig(veinConfig)
-        vein.calculatePoints(veinConfig.resolution)
+        vein.calculatePoints()
         vein.buildVeinSections()
         if veinConfig.hasParent:
             vein.adjustThicknessToParent(veinConfig.parent.radius)
         if veinConfig.hasThinning:
             vein.applyThinning(veinConfig.thinning)
+        if veinConfig.hasStenosis:
+            vein.applyStenosis(veinConfig.stenosis.position,veinConfig.stenosis.lenght,veinConfig.stenosis.grade)
+        if veinConfig.hasAneurysm:
+            vein.applyAneurysm(veinConfig.aneurysm.position,veinConfig.aneurysm.lenght,veinConfig.aneurysm.grade)
         if childConn != False:
             childConn.send(vein)
             childConn.close()
@@ -88,7 +105,11 @@ class HeartPlot():
             
     def _getVeinFromConfig(self,veinConfig):
         if veinConfig.shape == 'straight':
-            return VeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, self.heart)
+            if self.config.wireFrame:
+                multiplier = 4
+            else:
+                multiplier = 1
+            return VeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, veinConfig.resolution * multiplier, self.heart)
         elif veinConfig.shape == 'secondDegree':
             return SecondDegreeVeinSegment(veinConfig.begin, veinConfig.end, veinConfig.radius, self.heart)
     
@@ -96,7 +117,8 @@ class HeartPlot():
         plt.show()
 
     def setupPlot(self):
-        #heart.plotHeart(subplot)    
+        if self.config.disabled == False:
+            self.heart.plotHeart(self.subplot)    
         self.heart.plotVeins(self.subplot)
 
         self.subplot.set_xlim3d([-1,1])
@@ -118,7 +140,11 @@ class HeartPlot():
         self.subplot.view_init(rotateX,rotateY)
 
     def saveToFile(self,path):
+        timestamp = time.time()
+        dateTime = datetime.fromtimestamp(timestamp)
+        strDateTime = dateTime.strftime("%Y-%m-%d_%H-%M-%S")
+        
         imageExtention = '.png'
         imageName = str(int(self.rotateX)) + "_" + str(int(self.rotateY))
-        plt.savefig(path+imageName+imageExtention)
+        plt.savefig(path+strDateTime+imageName+imageExtention, dpi=300)
     

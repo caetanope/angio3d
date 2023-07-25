@@ -73,7 +73,50 @@
                 "ratio": 0.3,
                 "variation": 0.1,
                 "veins": [
-                  
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -40,
+                      "theta": 90,
+                      "variation": 0.1
+                    },
+                    "resolution": 5,
+                    "thinning": 0
+                  },
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -80,
+                      "theta": 90,
+                      "variation": 0.01
+                    },
+                    "resolution": 5,
+                    "branch": {
+                      "ratio": 0.3,
+                      "variation": 0.1,
+                      "veins": [
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -30,
+                            "theta": 105,
+                            "variation": 0.1
+                          },
+                          "resolution": 5,
+                          "thinning": 0
+                        },
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -85,
+                            "theta": 100,
+                            "variation": 0.01
+                          },
+                          "resolution": 5       
+                        }
+                      ]
+                    }
+                  }
                 ]
               }
             }

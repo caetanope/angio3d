@@ -9,7 +9,7 @@ veinRadius = 0.02
 fig = plt.figure()
 subplot = fig.add_subplot(111, projection='3d')
 
-heart = Heart(radius)
+heart = Heart(radius,False)
 heart.generateStraightVein(Point(0,0),Point(50,50),200,veinRadius)
 heart.generateStraightVein(Point(50,50),Point(90,90),200,veinRadius)
 heart.generateStraightVein(Point(90,90),Point(0,0),200,veinRadius)
