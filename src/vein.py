@@ -42,13 +42,22 @@ class VeinSection():
         phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
         endPoint = Point(phi,theta)
         if pointsEqual(endPoint,self.B) == False:
+    
             angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
             newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
 
             phi,theta,_ = cartesianToSpherical(newX[-1][-1], newY[-1][-1], newZ[-1][-1]) 
             endPoint = Point(phi,theta)
             if pointsEqual(endPoint,self.B) == False:
+                angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
                 newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),-2*angle,X,Y,Z)
+
+                phi,theta,_ = cartesianToSpherical(newX[-1][-1], newY[-1][-1], newZ[-1][-1]) 
+                endPoint = Point(phi,theta)
+                if pointsEqual(endPoint,self.B) == False:
+                    angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
+                    newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+                    #TODO
         self.X, self.Y, self.Z = newX, newY, newZ
   
 class VeinSegment():

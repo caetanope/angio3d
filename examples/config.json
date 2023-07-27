@@ -7,9 +7,9 @@
         "numberOfSteps": 1
       },
       "y": {
-        "begin": 304,
-        "end": 360,
-        "numberOfSteps": 1
+        "begin": 160,
+        "end": 430,
+        "numberOfSteps": 2
       },
       "z": {
         "begin": 0,
@@ -108,11 +108,36 @@
                         {
                           "shape": "straight",
                           "end": {
-                            "phi": -85,
-                            "theta": 100,
+                            "phi": -90,
+                            "theta": 110,
                             "variation": 0.01
                           },
-                          "resolution": 5       
+                          "resolution": 5,
+                          "branch":{
+                            "ratio":0.3,
+                            "variation":0.01,
+                            "veins":[
+                              {
+                                "shape": "straight",
+                                "end":{
+                                  "phi": -20,
+                                  "theta": 120,
+                                  "variation":0.01
+                                },
+                                "resolution": 5,
+                                "thinning": 0
+                              },
+                              {
+                                "shape":"straight",
+                                "end": {
+                                  "phi": -210,
+                                  "theta": 90,
+                                  "variation":0.01
+                                },
+                                "resolution":10
+                              }
+                            ]
+                          }       
                         }
                       ]
                     }

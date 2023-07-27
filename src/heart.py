@@ -51,15 +51,6 @@ class Heart():
                                      veinSection.Y * self.deformation,
                                      veinSection.Z * self.deformation, 
                                      rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
-                subplot.plot(veinSection.A.x * self.deformation, 
-                            veinSection.A.y * self.deformation, 
-                            veinSection.A.z * self.deformation, 
-                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
-                subplot.plot(veinSection.B.x * self.deformation, 
-                            veinSection.B.y * self.deformation, 
-                            veinSection.B.z * self.deformation, 
-                            marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
-            
 
 class HeartPlot():
     def __init__(self,config):
