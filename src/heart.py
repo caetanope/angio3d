@@ -126,9 +126,9 @@ class HeartPlot():
         self.subplot.set_box_aspect((1,1,1))
 
     def rotateView(self,rotateX,rotateY):
+        self.subplot.view_init(rotateX,rotateY)
         self.rotateX = rotateX
         self.rotateY = rotateY
-        self.subplot.view_init(rotateX,rotateY)
 
     def saveToFile(self,path):
         timestamp = time.time()
@@ -136,6 +136,6 @@ class HeartPlot():
         strDateTime = dateTime.strftime("%Y-%m-%d_%H-%M-%S")
         
         imageExtention = '.png'
-        imageName = str(int(self.rotateX)) + "_" + str(int(self.rotateY))
+        imageName = "_" + str(int(self.rotateX)) + "_" + str(int(self.rotateY))
         plt.savefig(path+strDateTime+imageName+imageExtention, dpi=300)
     

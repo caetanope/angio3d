@@ -18,7 +18,8 @@ class Point():
         return [self.x, self.y, self.z]
     
 def pointsEqual(A,B):
-    if abs(A.phi-B.phi)<0.1:
-        if abs(A.theta-B.theta)<0.1:
+    if abs(A.phi-B.phi)<1:
+        if abs(A.theta-B.theta)<1:
             return True
+    
     return False

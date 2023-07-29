@@ -79,11 +79,11 @@ def calculateAnglePointsFromOrigin(pointA,pointB,origin):
     #file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/artigos/trigonometry%20book.pdf
 
     lenght = np.deg2rad(calculateAnglePoints(origin, pointA))
-    lenghtToCenter = np.deg2rad(calculateAnglePoints(pointA, pointB))
+    AB = np.deg2rad(calculateAnglePoints(pointA, pointB))
 
     A = np.deg2rad(90)
     a = lenght
-    c = lenghtToCenter/2
+    c = AB/2
 
     sinA = np.sin(A)
     sin_c = np.sin(c)

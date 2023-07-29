@@ -44,21 +44,33 @@ class VeinSection():
         if pointsEqual(endPoint,self.B) == False:
     
             angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-            newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
 
-            phi,theta,_ = cartesianToSpherical(newX[-1][-1], newY[-1][-1], newZ[-1][-1]) 
+            phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
             endPoint = Point(phi,theta)
             if pointsEqual(endPoint,self.B) == False:
                 angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),-2*angle,X,Y,Z)
+                X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
 
-                phi,theta,_ = cartesianToSpherical(newX[-1][-1], newY[-1][-1], newZ[-1][-1]) 
+                phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
                 endPoint = Point(phi,theta)
                 if pointsEqual(endPoint,self.B) == False:
                     angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                    newX,newY,newZ = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
-                    #TODO
-        self.X, self.Y, self.Z = newX, newY, newZ
+                    X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+                    
+                    phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
+                    endPoint = Point(phi,theta)
+                    if pointsEqual(endPoint,self.B) == False:
+                        angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
+                        X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+
+                        phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
+                        endPoint = Point(phi,theta)
+                        if pointsEqual(endPoint,self.B) == False:
+                            angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
+                            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+
+        self.X, self.Y, self.Z = X, Y, Z
   
 class VeinSegment():
     def __init__(self, A, B, thickness, resolution, heart):
@@ -195,7 +207,7 @@ class VeinSegment():
     
     def applyThinning(self, finalThickness):
         for index, veinSection in enumerate(self.veinSections):
-            thickness = finalThickness + (float(self.resolution-index)/self.resolution)*(veinSection.thickness - finalThickness)
+            thickness = self.thickness*finalThickness + (float(len(self.veinSections)-index)/len(self.veinSections))*(veinSection.thickness - self.thickness*finalThickness)
             self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
             
 
