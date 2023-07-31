@@ -1,5 +1,6 @@
 import numpy as np
 from point import Point
+from scipy.spatial.transform import Rotation
 
 def cartesianToSpherical(x,y,z):
     r = getRadius(x, y, z)
@@ -61,8 +62,16 @@ def triAxisRotation(x,y,z,rotate_X,rotate_Y,rotate_Z):
     
     return X, Y, Z
 
+def rotatePointAroundVector(vector,angle,X,Y,Z):
+    rotvec = angle * np.pi / 180 * np.array(vector)
+    r = Rotation.from_rotvec(rotvec)
+
+    result = r.apply([X,Y,Z])
+    X,Y,Z = result
+
+    return X, Y, Z
+
 def rotateAroundVector(vector,angle,X,Y,Z):
-    from scipy.spatial.transform import Rotation
     rotvec = angle * np.pi / 180 * np.array(vector)
     r = Rotation.from_rotvec(rotvec)
 
@@ -73,17 +82,17 @@ def rotateAroundVector(vector,angle,X,Y,Z):
 
     return X, Y, Z
 
-def calculateAnglePointsFromOrigin(pointA,pointB,origin):
+def calculateAnglePointsFromOrigin(origin,destination,ringe):
     #file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/Trigonometria%20Esferica.pdf (2)
     #file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/admin,+Artigo+Joselito+Rodson+2018+Final.pdf (22)
     #file:///C:/Users/caeta/Meu%20Drive/Unisinos/TCC/artigos/trigonometry%20book.pdf
 
-    lenght = np.deg2rad(calculateAnglePoints(origin, pointA))
-    AB = np.deg2rad(calculateAnglePoints(pointA, pointB))
+    ringeToOrigin = np.deg2rad(calculateAnglePoints(ringe, origin))
+    originToDestination = np.deg2rad(calculateAnglePoints(origin, destination))
 
     A = np.deg2rad(90)
-    a = lenght
-    c = AB/2
+    a = ringeToOrigin
+    c = originToDestination/2
 
     sinA = np.sin(A)
     sin_c = np.sin(c)

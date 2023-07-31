@@ -130,7 +130,7 @@
                               {
                                 "shape":"straight",
                                 "end": {
-                                  "phi": -190,
+                                  "phi": -230,
                                   "theta": 90,
                                   "variation":0.01
                                 },
@@ -142,7 +142,7 @@
                                     {
                                       "shape": "straight",
                                       "end":{
-                                        "phi": -205,
+                                        "phi": -245,
                                         "theta": 85,
                                         "variation": 0.01
                                       },
@@ -152,7 +152,7 @@
                                     {
                                      "shape": "straight",
                                      "end": {
-                                      "phi": -210,
+                                      "phi": -250,
                                       "theta": 120,
                                       "variation": 0.1
                                      },
@@ -257,7 +257,7 @@
                   {
                     "shape": "straight",
                     "end": {
-                      "phi": 140,
+                      "phi": 100,
                       "theta": 80,
                       "variation": 0.01
                     },

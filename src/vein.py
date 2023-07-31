@@ -41,34 +41,19 @@ class VeinSection():
 
         phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
         endPoint = Point(phi,theta)
+        times = 5
         if pointsEqual(endPoint,self.B) == False:
     
             angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
 
-            phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
+            newX, newY, newZ = rotatePointAroundVector(self.A.getDirectionVector(),angle,X[-1][-1], Y[-1][-1], Z[-1][-1])
+            phi,theta,_ = cartesianToSpherical(newX, newY, newZ) 
             endPoint = Point(phi,theta)
+
             if pointsEqual(endPoint,self.B) == False:
-                angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+                angle = -angle
 
-                phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
-                endPoint = Point(phi,theta)
-                if pointsEqual(endPoint,self.B) == False:
-                    angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                    X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
-                    
-                    phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
-                    endPoint = Point(phi,theta)
-                    if pointsEqual(endPoint,self.B) == False:
-                        angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                        X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
-
-                        phi,theta,_ = cartesianToSpherical(X[-1][-1], Y[-1][-1], Z[-1][-1]) 
-                        endPoint = Point(phi,theta)
-                        if pointsEqual(endPoint,self.B) == False:
-                            angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
-                            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
 
         self.X, self.Y, self.Z = X, Y, Z
   
