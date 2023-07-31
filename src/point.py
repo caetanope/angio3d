@@ -21,9 +21,9 @@ def pointsEqual(A,B):
     if abs(A.phi-B.phi)<0.1:
         if abs(A.theta-B.theta)<0.1:
             return True
-    if abs(A.x - B.x)<0.01:
-        if abs(A.y - B.y)<0.01:
-            if abs(A.z - B.z)<0.01:
+    if abs(A.x - B.x)<0.001:
+        if abs(A.y - B.y)<0.001:
+            if abs(A.z - B.z)<0.001:
                 return True
     
     return False
