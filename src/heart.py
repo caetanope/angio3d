@@ -9,9 +9,9 @@ u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
 
 class Heart():
-    def __init__(self, radius, wireFrame):
+    def __init__(self, radius, wireFrame, deformation = 1):
         self.radius = radius
-        self.deformation = 1
+        self.deformation = deformation
         self.veins = []
         self.wireFrame = wireFrame
 
@@ -19,12 +19,42 @@ class Heart():
         self.deformation = deformation
     
     def getRadius(self, point = Point(0,0)):
-        return self.radius * self.deformation
+        if point.theta > 90 and point.theta <= 180:
+            k = np.sin(np.deg2rad(90)+point.thetaR)/5 * self.deformation 
+        else:
+            k = 0
+
+        #k = 0
+
+        return (self.radius + k) 
     
     def getHeart(self):
-        x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
-        y = self.getRadius() * np.outer(np.sin(u), np.sin(v))
-        z = self.getRadius() * np.outer(np.ones(np.size(u)), np.cos(v))
+        x = []
+        y = []
+        z = []
+        for phiR in u:
+            x1 = []
+            y1 = []
+            z1 = []
+            for thetaR in v:
+                phi = np.rad2deg(phiR)
+                theta = np.rad2deg(thetaR)
+                point = Point(phi, theta, self.getRadius(Point(phi,theta)))
+                x1.append(point.x)
+                y1.append(point.y)
+                z1.append(point.z)
+            x.append(x1)
+            y.append(y1)
+            z.append(z1)
+
+        x = np.array(x)
+        y = np.array(y)
+        z = np.array(z)
+
+        #x = self.getRadius() * np.outer(np.cos(u), np.sin(v))
+        #y = self.getRadius() * np.outer(np.sin(u), np.sin(v))
+        #z = self.getRadius() * np.outer(np.ones(np.size(u)), np.cos(v))
+        
         return x, y, z
 
     def plotHeart(self, subplot):
@@ -38,18 +68,18 @@ class Heart():
     def plotVein(self, subplot, vein):
         for veinSection in vein:
             if self.wireFrame:
-                subplot.plot(veinSection.A.x * self.deformation, 
-                            veinSection.A.y * self.deformation, 
-                            veinSection.A.z * self.deformation, 
+                subplot.plot(veinSection.A.x,
+                            veinSection.A.y,
+                            veinSection.A.z,
                             marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
-                subplot.plot(veinSection.B.x * self.deformation, 
-                            veinSection.B.y * self.deformation, 
-                            veinSection.B.z * self.deformation, 
+                subplot.plot(veinSection.B.x,
+                            veinSection.B.y,
+                            veinSection.B.z,
                             marker="o", markersize= veinSection.thickness*200, markeredgecolor="blue", markerfacecolor="blue")
             else:
-                subplot.plot_surface(veinSection.X * self.deformation, 
-                                     veinSection.Y * self.deformation,
-                                     veinSection.Z * self.deformation, 
+                subplot.plot_surface(veinSection.X,
+                                     veinSection.Y,
+                                     veinSection.Z,
                                      rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
 
 class HeartPlot():
@@ -58,7 +88,7 @@ class HeartPlot():
         self.veinConfigs = []
         self.fig = plt.figure()
         self.subplot = self.fig.add_subplot(111, projection='3d')
-        self.heart = Heart(config.size,self.config.wireFrame)
+        self.heart = Heart(config.size,self.config.wireFrame,config.deformation)
 
     def appendVeinConfigs(self,veinConfig):
         if veinConfig.disabled == True:
@@ -136,6 +166,10 @@ class HeartPlot():
         strDateTime = dateTime.strftime("%Y-%m-%d_%H-%M-%S")
         
         imageExtention = '.png'
-        imageName = "_" + str(int(self.rotateX)) + "_" + str(int(self.rotateY))
-        plt.savefig(path+strDateTime+imageName+imageExtention, dpi=300)
+        imageName = \
+            str(int(self.rotateX)) + "_" + str(int(self.rotateY)) + "_" +\
+            str(self.config.index) # + "_" +\
+            #strDateTime + "_" +\
+            
+        plt.savefig(path+imageName+imageExtention, dpi=300)
     

@@ -8,6 +8,24 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
 from heart import HeartPlot
 from config import *
 
+resolution_multiplier = 1
+resolution = 60 * resolution_multiplier
+xpoints = range(0,resolution)
+diastole = 13/20*resolution
+systole = resolution - diastole
+ypoints = []
+for x in xpoints:
+    if x < diastole:
+        y = (1-np.e**(-x/(resolution/10)))
+    else:
+        y = np.e**(-(x-diastole)/(resolution/15))
+
+    y=y*0.8+0.5
+    #y=y**(1/3)
+    ypoints.append(y)
+
+#ypoints = [1]
+
 def buildHeart(datasetConfig,heartConfig):
     heartPlot = HeartPlot(heartConfig)
     heartPlot.mapVeins()
@@ -20,14 +38,15 @@ def buildHeart(datasetConfig,heartConfig):
 
 if __name__ == '__main__':
     datasetConfig = DatasetConfig()
-    heartConfig = HeartConfig()
     #heartPlot.showPlot()
 
     jobs = []
     #heartPlot = buildHeart(angleX,angleY)
-    #heartPlot.show()q
-    job = Process(target=buildHeart, args=(datasetConfig,heartConfig))
-    jobs.append(job)
+    #heartPlot.show()
+    for index, deformation in enumerate(ypoints):
+        heartConfig = HeartConfig(deformation,index)
+        job = Process(target=buildHeart, args=(datasetConfig,heartConfig))
+        jobs.append(job)
 
     runningJobs = []
     while len(jobs)!=0:

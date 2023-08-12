@@ -29,7 +29,7 @@ def _getConfigHeart():
     return config["heart"]
    
 class HeartConfig():
-    def __init__(self):
+    def __init__(self, deformation, index):
         self.struct = _getConfigHeart()
         
         if "status" in self.struct:
@@ -47,6 +47,9 @@ class HeartConfig():
             self.wireFrame = self.struct["wireFrame"]
         else:
             self.wireFrame = False
+
+        self.deformation = deformation
+        self.index = index
 
 class Stenosis():
     def __init__(self,struct):
@@ -106,6 +109,8 @@ class VeinConfig():
         self.hasThinning = "thinning" in self.struct
         if self.hasThinning:
             self.thinning = self.struct["thinning"]
+        else:
+            self.thinning = 1
 
         if "status" in self.struct:
             self.disabled = self.struct["status"] == "disabled"
@@ -116,7 +121,7 @@ class VeinConfig():
         if self.hasBranch:
             veinStruct1 = self.branch["veins"][0]
             veinStruct2 = self.branch["veins"][1]
-            d1,d2 = calculateVeinBranchRadius(self.radius,self.branch["ratio"])
+            d1,d2 = calculateVeinBranchRadius(self.radius*self.thinning,self.branch["ratio"])
             self.children.append(VeinConfig(veinStruct1,self,self.end,d1))
             self.children.append(VeinConfig(veinStruct2,self,self.end,d2))           
 

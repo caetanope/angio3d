@@ -17,6 +17,9 @@ class Point():
     def getDirectionVector(self):
         return [self.x, self.y, self.z]
     
+    def getDummyPoint(self):
+        return Point(self.phi,self.theta)
+    
 def pointsEqual(A,B):
     if abs(A.phi-B.phi)<0.1:
         if abs(A.theta-B.theta)<0.1:

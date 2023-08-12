@@ -4,12 +4,14 @@ import numpy as np
 
 u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
+vein_v = np.linspace(0, 2 * np.pi, 100)
 
 class VeinSection():
     def __init__(self, A, B, thickness, veinSegment):
         self.A = A
         self.B = B
         self.thickness = thickness
+        self.finalThickness = thickness
         self.veinSegment = veinSegment
         self.generateVein()
 
@@ -22,18 +24,15 @@ class VeinSection():
         phi_end = np.deg2rad(phi_end)
 
         vein_u = np.linspace(phi_begin, phi_end, 100)
-        vein_v = np.linspace(0, 2 * np.pi, 100)
 
         X = np.outer(np.cos(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v))
         Y = np.outer(np.sin(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v)) 
         Z = np.outer(np.ones(np.size(u)), self.thickness * np.sin(vein_v))
         X,Y,Z = triAxisRotation(X,Y,Z,0,np.deg2rad(90),0)
 
-        if self.A.phi != 0 or self.A.theta !=0:
-            ABC = Vector(self.A,self.B)
-            origin = Vector(Point(0,0),Point(0,length))
+        if pointsEqual(self.A.getDummyPoint(), Point(0,0)) == False:
             rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),\
-                                                          self.A.getDirectionVector())
+                                                          self.A.getDummyPoint().getDirectionVector())
             
             for index in range(len(X)):
                 result = rotationMatrix.dot([X[index],Y[index],Z[index]])
@@ -41,19 +40,21 @@ class VeinSection():
 
         phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
         endPoint = Point(phi,theta)
-        times = 5
-        if pointsEqual(endPoint,self.B) == False:
-    
-            angle = calculateAnglePointsFromOrigin(endPoint,self.B,self.A)
 
-            newX, newY, newZ = rotatePointAroundVector(self.A.getDirectionVector(),angle,X[-1][-1], Y[-1][-1], Z[-1][-1])
+        if pointsEqual(endPoint,self.B.getDummyPoint()) == False:
+    
+            angle = calculateAnglePointsFromOrigin(endPoint,self.B.getDummyPoint(),self.A.getDummyPoint())
+
+            newX, newY, newZ = rotatePointAroundVector(self.A.getDummyPoint().getDirectionVector(),\
+                                                       angle,\
+                                                       X[-1][-1], Y[-1][-1], Z[-1][-1])
             phi,theta,_ = cartesianToSpherical(newX, newY, newZ) 
             endPoint = Point(phi,theta)
 
-            if pointsEqual(endPoint,self.B) == False:
+            if pointsEqual(endPoint,self.B.getDummyPoint()) == False:
                 angle = -angle
 
-            X,Y,Z = rotateAroundVector(self.A.getDirectionVector(),angle,X,Y,Z)
+            X,Y,Z = rotateAroundVector(self.A.getDummyPoint().getDirectionVector(),angle,X,Y,Z)
 
         self.X, self.Y, self.Z = X, Y, Z
   
@@ -120,7 +121,7 @@ class VeinSegment():
             zSemiPoint = A.z+iterator*dz/resolution
 
             phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            point = Point(phi,theta)
+            point = Point(phi,theta,self.heart.getRadius(Point(phi,theta)))
             self.points.insert(begin+iterator,point)
 
         return self.points
@@ -191,6 +192,7 @@ class VeinSegment():
         return self.veinSections
     
     def applyThinning(self, finalThickness):
+        self.finalThickness = finalThickness
         for index, veinSection in enumerate(self.veinSections):
             thickness = self.thickness*finalThickness + (float(len(self.veinSections)-index)/len(self.veinSections))*(veinSection.thickness - self.thickness*finalThickness)
             self.veinSections[index] = VeinSection(veinSection.A,veinSection.B,thickness,self)
