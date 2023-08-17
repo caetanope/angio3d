@@ -34,9 +34,10 @@ class VeinSection():
             rotationMatrix = rotation_matrix_from_vectors(Point(0,0).getDirectionVector(),\
                                                           self.A.getDummyPoint().getDirectionVector())
             
-            for index in range(len(X)):
-                result = rotationMatrix.dot([X[index],Y[index],Z[index]])
-                X[index],Y[index],Z[index] = result
+            X,Y,Z = rotationMatrix.dot([X.ravel(),Y.ravel(),Z.ravel()])
+            X = np.reshape(X, (-1, 100))
+            Y = np.reshape(Y, (-1, 100))
+            Z = np.reshape(Z, (-1, 100))
 
         phi,theta,_ = cartesianToSpherical(X[-1][-1],Y[-1][-1],Z[-1][-1])
         endPoint = Point(phi,theta)

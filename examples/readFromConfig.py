@@ -9,7 +9,7 @@ from config import *
 
 if __name__ == '__main__':
     
-    heartConfig = HeartConfig()
+    heartConfig = HeartConfig(1,1)
     heartPlot = HeartPlot(heartConfig)
     heartPlot.mapVeins()
     jobs = []

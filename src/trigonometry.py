@@ -75,11 +75,18 @@ def rotateAroundVector(vector,angle,X,Y,Z):
     rotvec = angle * np.pi / 180 * np.array(vector)
     r = Rotation.from_rotvec(rotvec)
 
-    for index in range(len(X)):
+    '''    for index in range(len(X)):
         for index2 in range(len(X[index])):
             result = r.apply([X[index][index2],Y[index][index2],Z[index][index2]])
             X[index][index2],Y[index][index2],Z[index][index2] = result
+            '''
 
+    XYZ = np.transpose([X.ravel(),Y.ravel(),Z.ravel()])
+    XYZ = list(map(r.apply,XYZ))
+    XYZ = np.transpose(XYZ)
+    X = np.reshape(XYZ[0], (-1, 100))
+    Y = np.reshape(XYZ[1], (-1, 100))
+    Z = np.reshape(XYZ[2], (-1, 100))
     return X, Y, Z
 
 def calculateAnglePointsFromOrigin(origin,destination,ringe):

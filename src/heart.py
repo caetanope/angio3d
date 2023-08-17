@@ -20,7 +20,7 @@ class Heart():
     
     def getRadius(self, point = Point(0,0)):
         if point.theta > 90 and point.theta <= 180:
-            k = np.sin(np.deg2rad(90)+point.thetaR)/5 * self.deformation 
+            k = np.sin(np.deg2rad(90)+point.thetaR)/5 / self.deformation 
         else:
             k = 0
 
@@ -168,7 +168,7 @@ class HeartPlot():
         imageExtention = '.png'
         imageName = \
             str(int(self.rotateX)) + "_" + str(int(self.rotateY)) + "_" +\
-            str(self.config.index) # + "_" +\
+            str(self.config.index).zfill(3) # + "_" +\
             #strDateTime + "_" +\
             
         plt.savefig(path+imageName+imageExtention, dpi=300)
