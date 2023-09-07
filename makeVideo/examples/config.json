@@ -1,11 +1,4 @@
 {
-  "xRay": {
-    "process": false,
-    "resolution": 500,
-    "betaVein": 1,
-    "betaHeart": 1,
-    "slices": 21
-  },
   "dataset": {
     "rotate": {
       "x": {
@@ -25,12 +18,11 @@
       }
     },
     "numberOfHearts": 10,
-    "save": true,
-    "processXray": true
+    "save": true
   },
   "heart": {
     "size": 1,
-    "status": "enabled",
+    "status": "disabled",
     "wireFrame": false,
     "veins": [
       {
@@ -70,7 +62,6 @@
               "thinning": 0
             },
             {
-              "status": "enabled",
               "shape": "straight",
               "end": {
                 "phi": -95,
@@ -185,7 +176,6 @@
       },
       {
         "name": "LCA ACE",
-        "status": "enabled",
         "radius": 0.02,
         "variation": 0.1,
         "shape": "straight",
@@ -318,7 +308,6 @@
             },
             {
               "name": "RC ACE",
-              "status": "enabled",
               "shape": "straight",
               "end": {
                 "phi": 5,

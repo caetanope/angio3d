@@ -2,11 +2,9 @@ from trigonometry import *
 from point import *
 import numpy as np
 
-sampling = 100
-
-u = np.linspace(0, 2 * np.pi, sampling)
-v = np.linspace(0, np.pi, sampling)
-vein_v = np.linspace(0, 2 * np.pi, sampling)
+u = np.linspace(0, 2 * np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+vein_v = np.linspace(0, 2 * np.pi, 100)
 
 class VeinSection():
     def __init__(self, A, B, thickness, veinSegment):
@@ -25,12 +23,11 @@ class VeinSection():
         phi_begin = np.deg2rad(phi_begin)
         phi_end = np.deg2rad(phi_end)
 
-        vein_u = np.linspace(phi_begin, phi_end, sampling)
+        vein_u = np.linspace(phi_begin, phi_end, 100)
 
         X = np.outer(np.cos(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v))
         Y = np.outer(np.sin(vein_u), self.veinSegment.heart.getRadius(self.A) + self.thickness * np.cos(vein_v)) 
         Z = np.outer(np.ones(np.size(u)), self.thickness * np.sin(vein_v))
-        
         X,Y,Z = triAxisRotation(X,Y,Z,0,np.deg2rad(90),0)
 
         if pointsEqual(self.A.getDummyPoint(), Point(0,0)) == False:
@@ -59,7 +56,7 @@ class VeinSection():
                 angle = -angle
 
             X,Y,Z = rotateAroundVector(self.A.getDummyPoint().getDirectionVector(),angle,X,Y,Z)
-        
+
         self.X, self.Y, self.Z = X, Y, Z
   
 class VeinSegment():

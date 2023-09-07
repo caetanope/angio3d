@@ -4,11 +4,9 @@ from vein import *
 import matplotlib.pyplot as plt
 from datetime import datetime  
 import time  
-from xray import XrayProcessor
 
-resolution = 1000
-u = np.linspace(0, 2 * np.pi, resolution)
-v = np.linspace(0, np.pi, resolution)
+u = np.linspace(0, 2 * np.pi, 100)
+v = np.linspace(0, np.pi, 100)
 
 class Heart():
     def __init__(self, radius, wireFrame, deformation = 1):
@@ -25,7 +23,8 @@ class Heart():
             k = np.sin(np.deg2rad(90)+point.thetaR)/5 / self.deformation 
         else:
             k = 0
-        k = 0
+
+        #k = 0
 
         return (self.radius + k) 
     
@@ -84,8 +83,7 @@ class Heart():
                                      rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
 
 class HeartPlot():
-    def __init__(self,config,xRayConfig):
-        self.xRayConfig = xRayConfig
+    def __init__(self,config):
         self.config = config
         self.veinConfigs = []
         self.fig = plt.figure()
@@ -107,16 +105,6 @@ class HeartPlot():
     def plotVeins(self, childConn = False):
         for veinConfig in self.veinConfigs:
             self.generateVein(veinConfig, childConn = childConn)
-
-    def processXray(self):
-        xrayProcessor = XrayProcessor(self.xRayConfig)
-        for vein in self.heart.veins:
-            for veinSection in vein.veinSections:
-                xrayProcessor.addVein(veinSection.X, veinSection.Y, veinSection.Z)
-        heartXYZ = self.heart.getHeart()
-        xrayProcessor.addHeart(heartXYZ[0],heartXYZ[1],heartXYZ[2])
-        xrayProcessor.calculateSlices()
-        xrayProcessor.plot()
     
     def generateVein(self, veinConfig, childConn = False):
         vein = self._getVeinFromConfig(veinConfig)

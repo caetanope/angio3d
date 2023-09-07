@@ -26,14 +26,11 @@ for x in xpoints:
 
 #ypoints = [1]
 
-def buildHeart(datasetConfig,heartConfig,xRayConfig):
-    heartPlot = HeartPlot(heartConfig,xRayConfig)
+def buildHeart(datasetConfig,heartConfig):
+    heartPlot = HeartPlot(heartConfig)
     heartPlot.mapVeins()
-    if datasetConfig.processXray == True:
-        heartPlot.processXray()
-    else:
-        heartPlot.plotVeins()
-        heartPlot.setupPlot()
+    heartPlot.plotVeins()
+    heartPlot.setupPlot()
     for angleX in datasetConfig.x.range:
         for angleY in datasetConfig.y.range:
             heartPlot.rotateView(int(angleX),int(angleY))
@@ -47,9 +44,8 @@ if __name__ == '__main__':
     #heartPlot = buildHeart(angleX,angleY)
     #heartPlot.show()
     for index, deformation in enumerate(ypoints):
-        xRayConfig = XrayConfig()
         heartConfig = HeartConfig(deformation,index)
-        job = Process(target=buildHeart, args=(datasetConfig,heartConfig,xRayConfig))
+        job = Process(target=buildHeart, args=(datasetConfig,heartConfig))
         jobs.append(job)
 
     runningJobs = []

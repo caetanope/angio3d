@@ -131,3 +131,5 @@ dmypy.json
 dataset/
 *.avi
 *.mp4
+*.jpg
+*.png

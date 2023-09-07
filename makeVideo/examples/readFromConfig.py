@@ -1,5 +1,6 @@
 import os
 import sys
+from multiprocessing import Process, Pipe
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
 
@@ -9,19 +10,25 @@ from config import *
 if __name__ == '__main__':
     
     heartConfig = HeartConfig(1,1)
-    xRayConfig = XrayConfig()
-    heartPlot = HeartPlot(heartConfig,xRayConfig)
+    heartPlot = HeartPlot(heartConfig)
     heartPlot.mapVeins()
+    jobs = []
     for veinConfig in heartPlot.veinConfigs:
-        heartPlot.generateVein(veinConfig)
-    if xRayConfig.process:
-        heartPlot.processXray()
-        exit()
-    heartPlot.plotVeins()
+        parent_conn, child_conn = Pipe()
+        job = Process(target=heartPlot.generateVein, args=(veinConfig,child_conn))
+        job.start()
+        jobs.append((job,parent_conn))
+
+    for job,parent_conn in jobs:
+        vein = parent_conn.recv()
+        heartPlot.heart.veins.append(vein)
+        job.join()
+
     heartPlot.setupPlot()
     heartPlot.showPlot()
 
-    '''counter = 0
+    '''
+    counter = 0
     while(1):
         counter += 1
 
@@ -46,4 +53,5 @@ if __name__ == '__main__':
         subplot.clear()
 
         if counter >= 1000:
-            break'''
+            break
+    '''

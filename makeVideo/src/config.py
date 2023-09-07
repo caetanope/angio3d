@@ -19,24 +19,11 @@ class AxisRotation():
 
 class DatasetConfig():
     def __init__(self):
-        self.struct = _getConfigDataset()
-        self.x = AxisRotation(self.struct["rotate"]["x"])
-        self.y = AxisRotation(self.struct["rotate"]["y"])
-        self.z = AxisRotation(self.struct["rotate"]["z"])
-        self.save = self.struct["save"]
-        self.processXray = self.struct["processXray"]
-
-def _getConfigXray():
-    return config["xRay"]
-
-class XrayConfig():
-    def __init__(self):
-        self.struct = _getConfigXray()
-        self.resolution = self.struct["resolution"]
-        self.betaVein = self.struct["betaVein"]
-        self.slices = self.struct["slices"]
-        self.betaHeart = self.struct["betaHeart"]
-        self.process = self.struct["process"]
+        datasetStruct = _getConfigDataset()
+        self.x = AxisRotation(datasetStruct["rotate"]["x"])
+        self.y = AxisRotation(datasetStruct["rotate"]["y"])
+        self.z = AxisRotation(datasetStruct["rotate"]["z"])
+        self.save = datasetStruct["save"]
 
 def _getConfigHeart():
     return config["heart"]
