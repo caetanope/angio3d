@@ -1,0 +1,21 @@
+@startuml diagramaDeAtividade
+
+start
+
+:ler configurações;
+:setup coração;
+:setup veias;
+:setup estenose;
+
+repeat :computar coração;    
+    repeat :capturar imagem; 
+        :aplicar efeito de fundo;
+        :aplicar ruido branco;
+    repeat while (novo valor de perspectiva?) is (sim)
+repeat while (novo valor de pulso?) is (sim)
+
+:salvar imagens geradas;
+
+stop
+
+@enduml

@@ -1,0 +1,31 @@
+from point import Point
+import numpy as np
+
+A = Point(50,50)
+print(A.x,A.y,A.z)
+A.rotate(np.deg2rad(90),0,0)
+print(A.x,A.y,A.z)
+A.rotate(np.deg2rad(90),0,0)
+print(A.x,A.y,A.z)
+A.rotate(np.deg2rad(90),0,0)
+print(A.x,A.y,A.z)
+A.rotate(np.deg2rad(90),0,0)
+print(A.x,A.y,A.z)
+
+A.rotate(0,np.deg2rad(90),0)
+print(A.x,A.y,A.z)
+A.rotate(0,np.deg2rad(90),0)
+print(A.x,A.y,A.z)
+A.rotate(0,np.deg2rad(90),0)
+print(A.x,A.y,A.z)
+A.rotate(0,np.deg2rad(90),0)
+print(A.x,A.y,A.z)
+
+A.rotate(0,0,np.deg2rad(90))
+print(A.x,A.y,A.z)
+A.rotate(0,0,np.deg2rad(90))
+print(A.x,A.y,A.z)
+A.rotate(0,0,np.deg2rad(90))
+print(A.x,A.y,A.z)
+A.rotate(0,0,np.deg2rad(90))
+print(A.x,A.y,A.z)

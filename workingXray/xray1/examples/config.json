@@ -1,0 +1,362 @@
+{
+  "xRay": {
+    "process": false,
+    "resolution": 500,
+    "betaVein": 1,
+    "betaHeart": 1,
+    "slices": 21
+  },
+  "dataset": {
+    "rotate": {
+      "x": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      },
+      "y": {
+        "begin": 120,
+        "end": 480,
+        "numberOfSteps": 2
+      },
+      "z": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      }
+    },
+    "numberOfHearts": 10,
+    "save": true,
+    "processXray": true
+  },
+  "heart": {
+    "size": 1,
+    "status": "enabled",
+    "wireFrame": false,
+    "veins": [
+      {
+        "status": "enabled",
+        "name": "RCA",
+        "radius": 0.02,
+        "variation": 0.1,
+        "shape": "straight",
+        "aneurysm":{
+          "position": 2,
+          "lenght": 1,
+          "grade": 0.5
+        },
+        "begin": {
+          "phi": -90,
+          "theta": 45,
+          "variation": 0.1
+        },
+        "end": {
+          "phi": -90,
+          "theta": 65,
+          "variation": 0.1
+        },
+        "resolution": 50,
+        "branch":{
+          "ratio": 0.3,
+          "variation": 0.1,
+          "veins": [
+            {
+              "shape": "straight",
+              "end": {
+                "phi": -70,
+                "theta": 70,
+                "variation": 0.1
+              },
+              "resolution": 50,
+              "thinning": 0
+            },
+            {
+              "status": "enabled",
+              "shape": "straight",
+              "end": {
+                "phi": -95,
+                "theta": 80,
+                "variation": 0.1
+              },
+              "resolution": 50,
+              "branch": {
+                "ratio": 0.3,
+                "variation": 0.1,
+                "veins": [
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -60,
+                      "theta": 100,
+                      "variation": 0.1
+                    },
+                    "resolution": 50,
+                    "thinning": 0
+                  },
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": -100,
+                      "theta": 90,
+                      "variation": 0.01
+                    },
+                    "resolution": 50,
+                    "branch": {
+                      "ratio": 0.3,
+                      "variation": 0.1,
+                      "veins": [
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -60,
+                            "theta": 125,
+                            "variation": 0.1
+                          },
+                          "resolution": 50,
+                          "thinning": 0
+                        },
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -110,
+                            "theta": 110,
+                            "variation": 0.01
+                          },
+                          "resolution": 50,
+                          "branch":{
+                            "ratio":0.3,
+                            "variation":0.01,
+                            "veins":[
+                              {
+                                "shape": "straight",
+                                "end":{
+                                  "phi": -50,
+                                  "theta": 150,
+                                  "variation":0.01
+                                },
+                                "resolution": 50,
+                                "thinning": 0
+                              },
+                              {
+                                "shape":"straight",
+                                "end": {
+                                  "phi": -230,
+                                  "theta": 90,
+                                  "variation":0.01
+                                },
+                                "resolution": 50,
+                                "branch":{
+                                  "ratio": 0.3,
+                                  "variation": 0.01,
+                                  "veins":[
+                                    {
+                                      "shape": "straight",
+                                      "end":{
+                                        "phi": -245,
+                                        "theta": 85,
+                                        "variation": 0.01
+                                      },
+                                      "resolution": 50,
+                                      "thinning": 0
+                                    },
+                                    {
+                                     "shape": "straight",
+                                     "end": {
+                                      "phi": -250,
+                                      "theta": 120,
+                                      "variation": 0.1
+                                     },
+                                     "resolution": 50,
+                                     "thinning": 0
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }       
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "LCA ACE",
+        "status": "enabled",
+        "radius": 0.02,
+        "variation": 0.1,
+        "shape": "straight",
+        "begin": {
+          "phi": -60,
+          "theta": 40,
+          "variation": 0.1
+        },
+        "end": {
+          "phi": -30,
+          "theta": 50,
+          "variation": 0.1
+        },
+        "resolution": 50,
+        "branch":{
+          "ratio": 0.5,
+          "variation": 0.1,
+          "veins":[
+            {
+              "name": "RIA ACE", 
+              "shape": "straight",
+              "end": {
+                "phi": -30,
+                "theta": 75,
+                "variation": 0.1
+              },
+              "resolution": 50,
+              "branch": {
+                "ratio": 0.4,
+                "variation": 0.01,
+                "veins":[
+                  {
+                    "shape":"straight",
+                    "end": {
+                      "phi": -15,
+                      "theta": 90,
+                      "variation": 0.1
+                    },
+                    "resolution": 50,
+                    "branch":{
+                      "ratio":0.1,
+                      "variation":0.01,
+                      "veins":[
+                        {
+                          "shape":"straight",
+                          "end":{
+                            "phi":-20,
+                            "theta":100,
+                            "variation":0.01
+                          },
+                          "resolution": 50,
+                          "thinning":0
+                        },
+                        {
+                          "shape":"straight",
+                          "end":{
+                            "phi":-10,
+                            "theta":125,
+                            "variation":0.01
+                          },
+                          "resolution": 50,
+                          "thinning":0
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "shape": "straight",
+                    "end":{
+                      "phi": -30,
+                      "theta": 100,
+                      "variation": 0.1
+                    },
+                    "resolution": 50,
+                    "branch": {
+                      "ratio": 0.2,
+                      "variation": 0.1,
+                      "veins": [
+                        {
+                          "shape": "straight",
+                          "end": {
+                            "phi": -35,
+                            "theta": 105,
+                            "variation": 0.01
+                          },
+                          "resolution": 50,
+                          "thinning": 0
+                        },
+                        {
+                          "shape":"straight",
+                          "end":{
+                            "phi":-10,
+                            "theta":150,
+                            "variation":0.01
+                          },
+                          "resolution": 50,
+                          "thinning": 0.5,
+                          "branch": {
+                            "ratio": 0.1,
+                            "variation": 0.01,
+                            "veins":[
+                              {
+                                "shape": "straight",
+                                "end": {
+                                  "phi": -20,
+                                  "theta": 160,
+                                  "variation": 0.01
+                                },
+                                "resolution": 50,
+                                "thinning": 0
+                              },
+                              {
+                                "shape": "straight",
+                                "end": {
+                                  "phi": 100,
+                                  "theta": 130,
+                                  "variation": 0.01
+                                },
+                                "resolution": 50,
+                                "thinning": 0
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "RC ACE",
+              "status": "enabled",
+              "shape": "straight",
+              "end": {
+                "phi": 5,
+                "theta": 50,
+                "variation": 0.1
+              },
+              "resolution": 50,
+              "branch":{
+                "ratio": 0.5,
+                "variation":0.01,
+                "veins":[
+                  {
+                    "name": "MargEsq",
+                    "shape": "straight",
+                    "end": {
+                      "phi": 15,
+                      "theta": 120,
+                      "variation": 0.1
+                    },
+                    "resolution": 50,
+                    "thinning": 0
+                  },
+                  {
+                    "shape": "straight",
+                    "end": {
+                      "phi": 100,
+                      "theta": 80,
+                      "variation": 0.01
+                    },
+                    "resolution": 50,
+                    "thinning": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
