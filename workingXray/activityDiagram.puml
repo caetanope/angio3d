@@ -1,0 +1,24 @@
+@startuml activityDiagram
+
+start
+
+:read configuration;
+:setup heart;
+:setup veins;
+:setup stenosis;
+
+repeat :pulse value
+    :calculate pulse;
+    :plot heart;
+    repeat :perspective
+        :capture frame;
+        :apply background effect;
+        :apply white noise;
+    repeat while
+repeat while
+
+:save generated images;
+
+stop
+
+@enduml
