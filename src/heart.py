@@ -25,9 +25,12 @@ class Heart():
             k = np.sin(np.deg2rad(90)+point.thetaR)/5 / self.deformation 
         else:
             k = 0
-        k = 0
+        #k = 0
 
         return (self.radius + k) 
+    
+    def putRadiusInPoint(self,point):
+        return Point(point.phi,point.theta,self.getRadius(point))
     
     def getHeart(self):
         x = []
@@ -40,7 +43,7 @@ class Heart():
             for thetaR in v:
                 phi = np.rad2deg(phiR)
                 theta = np.rad2deg(thetaR)
-                point = Point(phi, theta, self.getRadius(Point(phi,theta)))
+                point = self.putRadiusInPoint(Point(phi,theta))
                 x1.append(point.x)
                 y1.append(point.y)
                 z1.append(point.z)
@@ -57,12 +60,13 @@ class Heart():
         #z = self.getRadius() * np.outer(np.ones(np.size(u)), np.cos(v))
         
         return x, y, z
-    
+       
     def isPointInside(self,X,Y,Z):
         cx = 0
         cy = 0
         cz = 0
-        if (X-cx)**2+(Y-cy)**2+(Z-cz)**2 < self.getRadius():
+        phi, theta, _ = cartesianToSpherical(X, Y, Z)
+        if ((X-cx)**2+(Y-cy)**2+(Z-cz)**2)**(1/2) < self.getRadius(Point(phi, theta)):
             return True
         return False
             
@@ -96,9 +100,11 @@ class HeartPlot():
         self.xRayConfig = xRayConfig
         self.config = config
         self.veinConfigs = []
-        self.fig = plt.figure()
         if xRayConfig.process == False:
+            self.fig = plt.figure()
             self.subplot = self.fig.add_subplot(111, projection='3d')
+        else: 
+            self.xRayProcessor = XrayProcessor(self.xRayConfig)
         self.heart = Heart(config.size,self.config.wireFrame,config.deformation)
 
     def appendVeinConfigs(self,veinConfig):
@@ -118,13 +124,22 @@ class HeartPlot():
             self.generateVein(veinConfig, childConn = childConn)
 
     def processXray(self):
-        xRayProcessor = XrayProcessor(self.xRayConfig)
         for vein in self.heart.veins:
             for veinSection in vein.veinSections:
-                xRayProcessor.addVein(veinSection)
-        xRayProcessor.addHeart(self.heart)
-        xRayProcessor.rotateHeart(np.deg2rad(95),np.deg2rad(-55),np.deg2rad(-85))
-        xRayProcessor.plot()
+                self.xRayProcessor.addVein(veinSection)
+        self.xRayProcessor.addHeart(self.heart)
+        self.xRayProcessor.rotate(np.deg2rad(120),np.deg2rad(-95),np.deg2rad(-105))
+        self.xRayProcessor.process(self.config.index)
+
+    def showXray(self):
+        self.xRayProcessor.plot()
+
+    def saveXray(self,path):
+        self.xRayProcessor.save(getImagePath(path,self.config.index))
+
+    def xRayExist(self,path):
+        image = self.xRayProcessor.read(getImagePath(path,self.config.index))
+        return image is not None
     
     def generateVein(self, veinConfig, childConn = False):
         vein = self._getVeinFromConfig(veinConfig)
@@ -190,6 +205,13 @@ class HeartPlot():
             str(int(self.rotateX)) + "_" + str(int(self.rotateY)) + "_" +\
             str(self.config.index).zfill(3) # + "_" +\
             #strDateTime + "_" +\
+
             
         plt.savefig(path+imageName+imageExtention, dpi=300)
-    
+
+def getImagePath(path,index):
+    imageExtention = '.png'
+    imageName = \
+        str(index).zfill(3) # + "_" +\
+        #strDateTime + "_" +\
+    return path+imageName+imageExtention

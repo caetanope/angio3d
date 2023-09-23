@@ -24,6 +24,6 @@ def create_video_from_images(image_folder, output_path, fps):
 if __name__ == "__main__":
     image_folder = sys.argv[1]
     output_path = "output_video.avi"
-    fps = 60  # Frames per second
+    fps = 30  # Frames per second
 
     create_video_from_images(image_folder, output_path, fps)
