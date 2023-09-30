@@ -89,7 +89,7 @@ class XrayProcessor():
             
         runningJobs = []
         while len(jobs)!=0:
-            if(len(runningJobs)<10):
+            if(len(runningJobs)<13):
                 tupler = jobs.pop()
                 job, parent_conn = tupler
                 job.start()
