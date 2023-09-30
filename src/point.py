@@ -21,11 +21,7 @@ class Point():
     def getDummyPoint(self):
         return Point(self.phi,self.theta)
     
-    def rotate(self, X, Y, Z):
-        pointX, pointY, pointZ = triAxisRotation(self.x, self.y, self.z, X, Y, Z)
-        phi, theta, _ = cartesianToSpherical(pointX, pointY, pointZ)
-        return Point(phi, theta, self.radius)
-    
+   
 def pointsEqual(A,B):
     if abs(A.phi-B.phi)<0.1:
         if abs(A.theta-B.theta)<0.1:

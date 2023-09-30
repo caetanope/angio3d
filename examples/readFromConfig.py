@@ -18,6 +18,7 @@ if __name__ == '__main__':
         heartPlot.generateVein(veinConfig)
     if xRayConfig.process:
         heartPlot.processXray()
+        heartPlot.showXray()
         exit()
     heartPlot.plotVeins()
     heartPlot.setupPlot()

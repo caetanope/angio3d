@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import cv2
 from time2 import *
 from multiprocessing import Process, Pipe
+import os
+from trigonometry import triAxisRotation
 
 SIZE_RATIO = 3
 OFFSET = -SIZE_RATIO/2
@@ -23,18 +25,17 @@ class XrayProcessor():
         self.image = np.zeros([config.image.height,config.image.width], dtype="B")
         self.veins = []
         self.rayGunPosition = [0,0,RAYGUN_POSITION]
+        self.imageCenterPosition = [0,0,IMAGE_POSITION]
+        self.rotation = [0,0,0]
+
+    def rotate(self,X,Y,Z):
+        self.rotation = [X,Y,Z]
 
     def addVein(self,vein):
         self.veins.append(vein)
 
     def addHeart(self,heart):
         self.heart = heart
-
-    def rotateHeart(self,X,Y,Z):
-        veins = []
-        for vein in self.veins:
-            veins.append(vein.rotate(X,Y,Z))
-        self.veins = veins
 
     def traceRay(self,X,Y,child_conn=False):
         pixel = BACKGROUND
@@ -47,6 +48,8 @@ class XrayProcessor():
             traceY = imagePosToSpherePos(imageY,(-RAYGUN_POSITION+index*stepZ),raygunToImage)
             #print(traceX,traceY)
             traceZ = index*stepZ + OFFSET_Z
+            traceX, traceY, traceZ = triAxisRotation(traceX, traceY, traceZ,\
+                                                      self.rotation[0],self.rotation[1],self.rotation[2])
             for vein in self.veins:
                 if vein.isPointInside(traceX,traceY,traceZ,SIZE_RATIO/(2*self.config.image.height)):
                     pixel = addToPixel(pixel,255/self.config.slices)
@@ -69,8 +72,8 @@ class XrayProcessor():
         else:
             return line
     
-    def plot(self):
-        printTime()
+    def process(self,index):
+        printTime(index)
         
         jobs = []
         for X in range(self.config.image.width):
@@ -86,7 +89,7 @@ class XrayProcessor():
             
         runningJobs = []
         while len(jobs)!=0:
-            if(len(runningJobs)<16):
+            if(len(runningJobs)<13):
                 tupler = jobs.pop()
                 job, parent_conn = tupler
                 job.start()
@@ -107,8 +110,10 @@ class XrayProcessor():
             self.image[X]=line
         
         self.image = cv2.resize(self.image, [self.image.shape[1]*5,self.image.shape[0]*5])
+        printTime(index)
+
+    def plot(self):
         cv2.imshow("image",self.image)
-        printTime()
         print("######################################################################")
         print("######################################################################")
         print("######################################################################")
@@ -118,6 +123,16 @@ class XrayProcessor():
         print("######################################################################")
         print("######################################################################")
         cv2.waitKey()
+    
+    def save(self,path):
+        cv2.imwrite(path, self.image)
+
+    def read(self,path):
+        if os.path.isfile(path) == False:
+            return
+        image = cv2.imread(path)
+        return image
+        
 
 def addToPixel(pixel,value):
     if pixel + value < 256:

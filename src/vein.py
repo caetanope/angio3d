@@ -18,17 +18,13 @@ class VeinSection():
         self.generateSpine()
         self.generateVein()
 
-    def rotate(self, X, Y, Z):
-        A = self.A.rotate(X, Y, Z)
-        B = self.B.rotate(X, Y, Z)
-        return VeinSection(A,B,self.thickness,self.veinSegment)
 
     def generateSpine(self):
         self.spine = []
-        A = self.A
-        B = self.B
+        A = self.veinSegment.heart.putRadiusInPoint(self.A)
+        B = self.veinSegment.heart.putRadiusInPoint(self.B)
         self.spine.append(A)
-        resolution = 10
+        resolution = 5
 
         dx = B.x - A.x
         dy = B.y - A.y
@@ -40,7 +36,7 @@ class VeinSection():
             zSemiPoint = A.z+iterator*dz/resolution
 
             phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            point = Point(phi,theta,self.veinSegment.heart.getRadius(Point(phi,theta)))
+            point = self.veinSegment.heart.putRadiusInPoint(Point(phi,theta))
             self.spine.append(point)
 
         self.spine.append(B)
@@ -115,8 +111,8 @@ class VeinSegment():
     def calculatePoints(self):
         
         self.points = []
-        A = self.A
-        B = self.B
+        A = self.heart.putRadiusInPoint(self.A)
+        B = self.heart.putRadiusInPoint(self.B)
         self.points.append(A)
         resolution = self.resolution
 
@@ -130,7 +126,7 @@ class VeinSegment():
             zSemiPoint = A.z+iterator*dz/resolution
 
             phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            point = Point(phi,theta,self.heart.getRadius(Point(phi,theta)))
+            point = self.heart.putRadiusInPoint(Point(phi,theta))
             self.points.append(point)
 
         self.points.append(B)
@@ -159,7 +155,7 @@ class VeinSegment():
             zSemiPoint = A.z+iterator*dz/resolution
 
             phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
-            point = Point(phi,theta,self.heart.getRadius(Point(phi,theta)))
+            point = self.heart.putRadiusInPoint(Point(phi,theta))
             self.points.insert(begin+iterator,point)
 
         return self.points
@@ -267,6 +263,6 @@ class SecondDegreeVeinSegment(VeinSegment):
             y = (a * (x ** 2)) + (b * x) + c
             phi = x
             theta = y
-            self.points.append(Point(phi, theta, self.heart.getRadius(Point(phi,theta))))
+            self.points.append(self.heart.putRadiusInPoint(Point(phi,theta)))
 
         return self.points

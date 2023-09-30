@@ -2,6 +2,7 @@ import os
 import sys
 import matplotlib.pyplot as plt
 from multiprocessing import Process, Pipe
+from time2 import *
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src/'))
 
@@ -9,7 +10,7 @@ from heart import HeartPlot
 from config import *
 
 resolution_multiplier = 1
-resolution = 60 * resolution_multiplier
+resolution = 30 * resolution_multiplier
 xpoints = range(0,resolution)
 diastole = 13/20*resolution
 systole = resolution - diastole
@@ -28,42 +29,30 @@ for x in xpoints:
 
 def buildHeart(datasetConfig,heartConfig,xRayConfig):
     heartPlot = HeartPlot(heartConfig,xRayConfig)
+    if xRayConfig.process:
+       if heartPlot.xRayExist("dataset/"):
+            print("xray found", heartConfig.index)
+            return 
     heartPlot.mapVeins()
-    if datasetConfig.processXray == True:
+    for veinConfig in heartPlot.veinConfigs:
+        heartPlot.generateVein(veinConfig)
+    if xRayConfig.process:
         heartPlot.processXray()
+        heartPlot.saveXray("dataset/")
     else:
         heartPlot.plotVeins()
         heartPlot.setupPlot()
-    for angleX in datasetConfig.x.range:
-        for angleY in datasetConfig.y.range:
-            heartPlot.rotateView(int(angleX),int(angleY))
-            heartPlot.saveToFile("dataset/")
+        heartPlot.saveToFile("dataset/")
 
 if __name__ == '__main__':
     datasetConfig = DatasetConfig()
     #heartPlot.showPlot()
-
+    printTime()
     jobs = []
     #heartPlot = buildHeart(angleX,angleY)
     #heartPlot.show()
     for index, deformation in enumerate(ypoints):
         xRayConfig = XrayConfig()
         heartConfig = HeartConfig(deformation,index)
-        job = Process(target=buildHeart, args=(datasetConfig,heartConfig,xRayConfig))
-        jobs.append(job)
-
-    runningJobs = []
-    while len(jobs)!=0:
-        if(len(runningJobs)<16):
-            job = jobs.pop()
-            job.start()
-            runningJobs.append(job)
-
-        for job in runningJobs:
-            if job.is_alive() == False:
-                runningJobs.remove(job)
-
-    for job in runningJobs:
-        job.join()
-
+        buildHeart(datasetConfig,heartConfig,xRayConfig)
             
