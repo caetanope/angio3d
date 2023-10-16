@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 resolution_multiplier = 1
-resolution = 60 * resolution_multiplier
+resolution = 30 * resolution_multiplier
 xpoints = range(0,resolution)
 diastole = 13/20*resolution
 systole = resolution - diastole

@@ -1,0 +1,20 @@
+@startuml diagramaDeAtividade
+
+|Gerador de imagens|
+start
+
+:ler configurações;
+:computar deformações;
+
+|Coração|
+:setup coração;
+:setup veias;
+:setup estenose;
+
+|Raio X|
+:calcular obstaculos do raio;
+:salvar imagens geradas;
+
+stop
+
+@enduml
