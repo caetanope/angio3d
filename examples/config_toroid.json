@@ -1,0 +1,59 @@
+{
+  "xRay": {
+    "process": false,
+    "resolution": 500,
+    "betaVein": 1,
+    "betaHeart": 1,
+    "slices": 200,
+    "image": {
+      "height": 200,
+      "width": 200
+    }
+  },
+  "dataset": {
+    "rotate": {
+      "x": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      },
+      "y": {
+        "begin": 120,
+        "end": 480,
+        "numberOfSteps": 2
+      },
+      "z": {
+        "begin": 0,
+        "end": 360,
+        "numberOfSteps": 1
+      }
+    },
+    "numberOfHearts": 10,
+    "save": true,
+    "processXray": true
+  },
+  "heart": {
+    "size": 1,
+    "status": "disabled",
+    "wireFrame": false,
+    "veins": [
+      {
+        "status": "enabled",
+        "radius": 0.02,
+        "variation": 0.1,
+        "shape": "straight",
+        "begin": {
+          "phi": 0,
+          "theta": 0,
+          "variation": 0.1
+        },
+        "end": {
+          "phi": 0,
+          "theta": 90,
+          "variation": 0.1
+        },
+        "resolution": 8      
+      }
+    ]
+  }
+}

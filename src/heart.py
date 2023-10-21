@@ -195,6 +195,12 @@ class HeartPlot():
         self.rotateX = rotateX
         self.rotateY = rotateY
 
+    def rotateAndSave(self,datasetConfig):
+        for rotateX in datasetConfig.x.range:
+            for rotateY in datasetConfig.y.range:
+                self.rotateView(rotateX,rotateY)
+                self.saveToFile("dataset/")
+
     def saveToFile(self,path):
         timestamp = time.time()
         dateTime = datetime.fromtimestamp(timestamp)

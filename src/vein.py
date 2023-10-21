@@ -30,7 +30,7 @@ class VeinSection():
         dy = B.y - A.y
         dz = B.z - A.z
 
-        for iterator in range(1,resolution-1):
+        for iterator in range(1,resolution):
             xSemiPoint = A.x+iterator*dx/resolution
             ySemiPoint = A.y+iterator*dy/resolution
             zSemiPoint = A.z+iterator*dz/resolution
@@ -101,6 +101,7 @@ class VeinSegment():
         self.points = []
         self.veinSections = []
         self.resolution = resolution
+        self.semiPoints = []
 
     def calculateChildrenThickness(self, ratioA):
         parentSectionArea = calculateAreaFromDiameter(self.thickness)
@@ -120,14 +121,16 @@ class VeinSegment():
         dy = B.y - A.y
         dz = B.z - A.z
 
-        for iterator in range(1,resolution-1):
+        for iterator in range(1,resolution):
             xSemiPoint = A.x+iterator*dx/resolution
             ySemiPoint = A.y+iterator*dy/resolution
             zSemiPoint = A.z+iterator*dz/resolution
 
-            phi, theta, _ = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
+            phi, theta, radius = cartesianToSpherical(xSemiPoint,ySemiPoint,zSemiPoint)
+            semiPoint = Point(phi,theta,radius)
             point = self.heart.putRadiusInPoint(Point(phi,theta))
             self.points.append(point)
+            self.semiPoints.append(semiPoint)
 
         self.points.append(B)
             

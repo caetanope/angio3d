@@ -42,7 +42,7 @@ def buildHeart(datasetConfig,heartConfig,xRayConfig):
     else:
         heartPlot.plotVeins()
         heartPlot.setupPlot()
-        heartPlot.saveToFile("dataset/")
+        heartPlot.rotateAndSave(datasetConfig)
 
 if __name__ == '__main__':
     datasetConfig = DatasetConfig()
