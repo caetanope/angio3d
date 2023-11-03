@@ -132,4 +132,9 @@ dataset/
 *.avi
 *.mp4
 *.jpg
-*.png
+makevideo/*.png
+makevideo/*/*.png
+workingXray/*.png
+workingXray/*/*.png
+workingXray/*/*/*.png
+xray1/*/*.png
