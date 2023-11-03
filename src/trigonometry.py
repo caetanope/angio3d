@@ -62,14 +62,12 @@ def triAxisRotation(x,y,z,rotate_X,rotate_Y,rotate_Z):
     return X, Y, Z
 
 def rotatePointAroundVector(vector,angle,X,Y,Z):
-    rotvec = angle * np.pi / 180 * np.array(vector)
-    r = Rotation.from_rotvec(rotvec)
-
-    result = r.apply([X,Y,Z])
-    X,Y,Z = result
-
-    return X, Y, Z
-
+    #https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation#Rotation_vector
+    angleR = np.deg2rad(angle)
+    v = np.array([X,Y,Z])
+    result = np.cos(angleR)*v + np.sin(angleR)*np.cross(vector,v)+(1-np.cos(angleR))*np.dot(np.dot(vector,v),vector)
+    return result
+    
 def rotateAroundVector(vector,angle,X,Y,Z):
     rotvec = angle * np.pi / 180 * np.array(vector)
     r = Rotation.from_rotvec(rotvec)
